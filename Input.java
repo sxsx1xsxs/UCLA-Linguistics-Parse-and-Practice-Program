@@ -7,7 +7,7 @@ import java.util.Vector;
 
 
 public class Input {
-	Grammar g=new Grammar();
+	Grammar2 g=new Grammar2();
 //	Set<String> set=new HashSet<String>();
 //	Set<String> setBasic=new HashSet<String>();
 //	Set<String> setRules= new HashSet<String>();
@@ -67,13 +67,10 @@ public class Input {
 			list.add(y);
 			index++;
 		}
-		
-		
-			//System.out.println(setRules.size());
 			
 	}
 	
-	Input(String input, Grammar grammar){
+	Input(String input, Grammar2 grammar){
 		g=grammar;
 		StringBuffer n = new StringBuffer("");
 		for(int i=0;i<input.length();i++){
@@ -111,9 +108,6 @@ public class Input {
 			list.add(y);
 			index++;
 		}
-		
-		
-			//System.out.println(setRules.size());
 			
 	}
 	
@@ -230,13 +224,7 @@ public class Input {
 		
 	}
 	
-	void test(){
-		System.out.println(error+" "+errorMessage);
-		for(StringWithError x:list){
-			if(x.error!=0)
-				System.out.println(x.s);
-		}
-	}
+
 	
 	
 	public Vector<Clause> createBasicClauses(){
@@ -259,8 +247,6 @@ public class Input {
 			basics.mid= (countOfStart+countOfEnd)/2.0+countOfWords;
 			basics.length=list.elementAt(i).s.length();
 			v1.add(basics);
-			System.out.println("clasue: " + basics.node.s + " is created with mid of " + basics.mid+" and length of "+ basics.length+ " and starts at "+(countOfStart+countOfWords)
-					+ " and ends at "+ (countOfEnd+countOfWords)+" and its level is "+basics.levels);
 			countOfStart=countOfEnd;
 			}
 			else{
@@ -318,8 +304,7 @@ public class Input {
 				newClause.mid=mid/countOfParts;
 				newClause.levels=levelMax+1;
 				newClause.string=string;
-				System.out.println("node "+newClause.node.s+ " is created with level of "+newClause.levels);
-				if(!g.set.contains(newClause.node.s)){
+					if(!g.set.contains(newClause.node.s)){
 					list.elementAt(newClause.node.index).error=6;
 					newClause.node.error=6;
 					error=6;
@@ -381,10 +366,7 @@ public class Input {
 	
 	public static void main(String args[]){
 		Input x = new Input ("[n [np name][np hheeh]][np n]");
-		x.test();
-		x.buildStructure(x.createBasicClauses());
-		x.test();
-		//x.test();
+	
 	}
 	
 }

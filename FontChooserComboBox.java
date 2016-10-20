@@ -1,4 +1,3 @@
-package com.xenoage.util.gui;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -85,9 +84,11 @@ public class FontChooserComboBox
     
     //set editor and item components
     this.setEditable(true);
-		this.setEditor(new FontChooserComboBoxEditor());
-		this.setRenderer(new FontChooserComboBoxRenderer());
-		this.setBorder(new LineBorder(Color.gray, 1));
+	this.setEditor(new FontChooserComboBoxEditor());
+	this.setRenderer(new FontChooserComboBoxRenderer());
+	String x=new Preference().getString("FontStyle");
+	this.setSelectedItem(x);
+	//this.setBorder(new LineBorder(Color.gray, 1));
 		
 		//listen to own item changes
 		this.addItemListener(this);
@@ -201,7 +202,7 @@ public class FontChooserComboBox
 		for (String fontName : fontNames)
     {
 			Item item = new Item(fontName);
-    	addItem(item);
+			addItem(item);
     	itemsCache.put(fontName, item);
     }
 		//reselect item

@@ -64,7 +64,6 @@ public class TreeDisplay extends JPanel {
 	    	Font font=test.getFont();
 	    	
 	    	 height=font.getSize();
-	    	 System.out.println("the height is" +height);
 	    	type=s;
 	    	int length=0;
 	    	int levelmax=0;
@@ -89,7 +88,6 @@ public class TreeDisplay extends JPanel {
 	    	Font font=test.getFont();
 	    	
 	    	 height=font.getSize();
-	    	 System.out.println("the height is" +height);
 	    	
 	    	int length=0;
 	    	int levelmax=0;
@@ -192,8 +190,7 @@ public class TreeDisplay extends JPanel {
         	tree.setColor(SystemColor.white);
         	tree.fillRect(0, 0, recWidth, recHeight);
         	tree.setColor(SystemColor.black);
-         // tree.setColor(Color.blue);
-	    	System.out.println(12);
+
          
            
            if (type=="BottomUp")

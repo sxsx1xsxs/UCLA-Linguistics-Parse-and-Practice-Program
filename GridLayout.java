@@ -55,7 +55,7 @@ public class GridLayout {
                  c4.fill = GridBagConstraints.BOTH;
                  c4.ipady = 40;      //make this component tall
                  c4.weightx = 0.0;
-                 c4.weighty=0.2;
+                // c4.weighty=0.2;
                  c4.gridwidth = 3;
                  c4.gridx = 0;
                  c4.gridy = 1;

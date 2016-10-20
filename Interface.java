@@ -52,7 +52,7 @@ import javax.swing.text.Document;
 
 
     public class Interface {
-    	static Grammar g=null;
+    	static Grammar2 g=null;
     	
     	    
     	 static void changeFontRecursive(Container root, Font font) {
@@ -134,7 +134,7 @@ import javax.swing.text.Document;
         	xi=i;
         }
 
-        public WindowL(Grammar grammar, LMenuBar menu) {
+        public WindowL(Grammar2 grammar, LMenuBar menu) {
         	super.setLayout(new GridBagLayout());
         	
         	
@@ -415,7 +415,7 @@ import javax.swing.text.Document;
                        } catch(Exception ex) {
                          ex.printStackTrace();
                        }
-                    System.out.println("Menu item Test2");
+
                   }
                 });
         }
@@ -434,7 +434,7 @@ import javax.swing.text.Document;
             Input sent=new Input(input,g);
             int left=sent.countLeftBracket();
             int right=sent.countRightBracket();
-            System.out.println(1);
+
             brackets.setText("Left brackets: " +left+"              Right brackets: "+right);
             
            
