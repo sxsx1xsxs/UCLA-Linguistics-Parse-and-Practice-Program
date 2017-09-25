@@ -19,8 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import sun.misc.IOUtils;
-
 
 //this is the class storing all the path to resource file
 //user's preference setting
@@ -138,7 +136,7 @@ public class Preference {
 		    StringBuilder builder = new StringBuilder();
 		    while((line = bReader.readLine()) != null) {  //Read till end
 		        builder.append(line);
-		        builder.append("\n"); // append new line to preserve lines
+		        builder.append(newline); // append new line to preserve lines
 		    }
 		    bReader.close();         //close all opened stuff
 		    iStreamReader.close();
@@ -153,6 +151,7 @@ public class Preference {
 			
 
 			String grammar_text_from_jar=Preference.get_string_from_jar(grammar_path);
+			System.out.println(grammar_text_from_jar);
 			
 			//the path used as argument is the relative path to the .class file
 			//the "/" is optional

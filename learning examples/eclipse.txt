@@ -1,2 +1,0 @@
-EGIT: git in eclipse
-https://wiki.eclipse.org/EGit/User_Guide/State

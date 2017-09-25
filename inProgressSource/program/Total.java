@@ -43,7 +43,7 @@ import javax.swing.UIManager;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
-import program.grammar.Grammar;
+import program.Grammar.Grammar;
 import program.mainUI.FontChooserComboBox;
 import program.mainUI.Interface;
 import program.mainUI.LMenuBar;
@@ -53,25 +53,32 @@ import program.mainUI.inforTree.SentenceSetStorage;
 
 
 
+
+
 ///*this is the controlling source code
 public class Total extends JPanel {
 	//can be "" or "teacher"
 	String permission="";
 	Grammar grammar = new Grammar();
-	LMenuBar menu = new LMenuBar();
-	Plain plain = new Plain(grammar);
-	Interface treeMode = new Interface(plain);
-
+    LMenuBar menu = new LMenuBar();
+	Plain plain;
+	Interface treeMode;
+	
 	static Preference pp=new Preference();
-
+	
 	File file;
 	String universalpassword="";
 	File ans;
 
 	public Total() {
-
+		try {
+			plain=new Plain(grammar);
+			treeMode = new Interface(plain);
+		} catch (Exception e2) {
+			e2.printStackTrace();
+		}
 		setLayout(new GridBagLayout());
-
+		
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
@@ -79,7 +86,7 @@ public class Total extends JPanel {
 		c.weighty = 0;
 		c.fill = GridBagConstraints.BOTH;
 		add(menu, c);
-
+		
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -89,32 +96,32 @@ public class Total extends JPanel {
 		add(treeMode, c);
 		treeMode.practiceMode();
 		menu.studentmode();
-
-		//treeMode.teacherMode();
-		//menu.teachermode();
-
+		
+//		treeMode.teacherMode();
+//		menu.teachermode();
+		
 		menu.topdown.setEnabled(false);
 		menu.bottomup.setEnabled(false);
 		menu.turnoffRC.setEnabled(true);
 		menu.turnonRC.setEnabled(false);
 		menu.parse.setEnabled(false);
-
+		
 		menu.turnoffRC.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
+				
 				menu.turnonRC.setSelected(false);
 				menu.turnoffRC.setSelected(true);
-
+				
 				treeMode.drawingPanel.turnoffRC();
-
+				
 				menu.turnonRC.setEnabled(true);
 				menu.turnoffRC.setEnabled(false);
 			}
-
+			
 		});
-
+		
 		menu.turnonRC.addActionListener(new ActionListener(){
 
 			@Override
@@ -123,15 +130,15 @@ public class Total extends JPanel {
 				menu.turnoffRC.setSelected(false);
 
 				treeMode.drawingPanel.turnonRC();
-
+				
 				menu.turnonRC.setEnabled(false);
 				menu.turnoffRC.setEnabled(true);
 			}
-
+			
 		});
-
+		
 		menu.format.addMouseMotionListener(new MouseAdapter(){
-
+			
 			@Override
 			public void mouseMoved(MouseEvent e){
 
@@ -144,8 +151,8 @@ public class Total extends JPanel {
 				}
 			}
 		});
-
-
+		
+		
 		//menu item Font/System/larger
 		menu.large.addActionListener(new ActionListener(){
 
@@ -155,24 +162,24 @@ public class Total extends JPanel {
 				int input=pp.getInt("SystemFontSize")+2;
 				Font font = new Font(pp.getString("FontStyle"), Font.PLAIN, input);
 				changeSystemFont(font);
-
+								
 				//get the drawing panel to the lowest point
 				SwingUtilities.invokeLater(new Runnable()
 				{
-					@Override
+				    @Override
 					public void run()
-					{
-						Rectangle bounds = plain.drawroom.getViewport().getViewRect();
-						JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
-						JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
-						vertical.setValue( (vertical.getMaximum() - bounds.height)  );
-					}
+				    {
+				        Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+				        JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
+				        JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+				        vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+				    }
 				});
-
+			
 			}
-
+			
 		});
-
+		
 		menu.small.addActionListener(new ActionListener(){
 
 			@Override
@@ -181,26 +188,27 @@ public class Total extends JPanel {
 				int input=pp.getInt("SystemFontSize")-2;
 				Font font = new Font(pp.getString("FontStyle"), Font.PLAIN, input);
 				changeSystemFont(font);
-
-
-
-
+					
+					
+				
+				
 				SwingUtilities.invokeLater(new Runnable()
 				{
-					@Override
+				    @Override
 					public void run()
-					{
-						Rectangle bounds = plain.drawroom.getViewport().getViewRect();
-						JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
-						JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
-						vertical.setValue( (vertical.getMaximum() - bounds.height)  );
-					}
+				    {System.out.println(10);
+				    	System.out.println("i am here scrollbar");
+				        Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+				        JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
+				        JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+				        vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+				    }
 				});
-
+			
 			}
-
+			
 		});
-
+		
 		menu.tsmall.addActionListener(new ActionListener(){
 
 			@Override
@@ -208,27 +216,33 @@ public class Total extends JPanel {
 
 				int input=pp.getInt("TreeSize")-2;
 				pp.setInt("TreeSize", input);
-
-				for (Component comp : (plain.drawroom.canvas).getComponents()) {
-					comp.setFont(new Font(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
-				}
+				
+					for (Component comp : (plain.drawroom.canvas).getComponents()) {
+					    comp.setFont(new Font(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
+					  // IndexNode current=(IndexNode) (treeMode.sentenceTree.presentNode);
+					   //current.outputTree(sentenceString, meaning, plain, bounds);
+					}
 			}
 		});
-
+		
 		menu.tlarge.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("this is treesize"+pp.getInt("TreeSize"));
 				int input=pp.getInt("TreeSize")+2;
 				pp.setInt("TreeSize", input);
+				System.out.println("this is again treesize"+pp.getInt("TreeSize"));
 				treeMode.sentenceTree.selectNode();
-				for (Component comp : (plain.drawroom.canvas).getComponents()) {
-					comp.setFont(new Font(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
-				}
+					for (Component comp : (plain.drawroom.canvas).getComponents()) {
+					    comp.setFont(new Font(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
+					   // treeMode.sentenceTree.selectNode();
+//					   (IndexNode) (treeMode.sentenceTree.presentNode)
+					}
 			}
 		});
-
-
+	
+		
 		menu.wi.addActionListener(new ActionListener(){
 
 			@Override
@@ -237,9 +251,9 @@ public class Total extends JPanel {
 				pp.setDouble("WidthIndex",treeMode.drawingPanel.widthIndex);
 				treeMode.drawingPanel.adjust();
 			}
-
+			
 		});
-
+		
 		menu.hi.addActionListener(new ActionListener(){
 
 			@Override
@@ -248,10 +262,10 @@ public class Total extends JPanel {
 				pp.setDouble("HeightIndex",treeMode.drawingPanel.heightIndex);
 				treeMode.drawingPanel.adjust();
 			}
-
+			
 		});
-
-
+		
+		
 		menu.freedrawing.addActionListener(new ActionListener(){
 
 			@Override
@@ -261,9 +275,9 @@ public class Total extends JPanel {
 				menu.parse.setEnabled(true);
 				menu.freedrawing.setEnabled(false);
 			}
-
+			
 		});
-
+		
 
 		menu.parse.addActionListener(new ActionListener(){
 
@@ -274,10 +288,10 @@ public class Total extends JPanel {
 				menu.parse.setEnabled(false);
 				menu.freedrawing.setEnabled(true);
 			}
-
+			
 		});
-
-
+		
+		
 		menu.hd.addActionListener(new ActionListener(){
 
 			@Override
@@ -286,9 +300,9 @@ public class Total extends JPanel {
 				pp.setDouble("HeightIndex",treeMode.drawingPanel.heightIndex);
 				treeMode.drawingPanel.adjust();
 			}
-
+			
 		});
-
+		
 		menu.wd.addActionListener(new ActionListener(){
 
 			@Override
@@ -297,36 +311,42 @@ public class Total extends JPanel {
 				pp.setDouble("WidthIndex",treeMode.drawingPanel.widthIndex);
 				treeMode.drawingPanel.adjust();
 			}
-
+			
 		});
-
+		
 		menu.topdown.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(6);
 				treeMode.drawingPanel.topDown();
 			}
-
+			
 		});
-
+		
 		menu.bottomup.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(7);
 				treeMode.drawingPanel.bottomUp();;
 			}
-
+			
 		});
-
-
+		
+		
 		menu.customize.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println(8);
 				FontChooserComboBox fbox;
 				JComboBox box;
-
-
+				
+				
 				JPanel panel=new JPanel(new GridBagLayout());
 				GridBagConstraints c=new GridBagConstraints();
 				c.gridx=0;
@@ -335,26 +355,26 @@ public class Total extends JPanel {
 				c.fill=GridBagConstraints.BOTH;
 				c.insets=new Insets(10,10,10,10);
 				panel.add(new JLabel("Please select style"), c);
-
+				
 				c.gridy=1;
 				fbox=new FontChooserComboBox();
 				panel.add(fbox, c);
-
+				
 				c.gridy=2;
 				panel.add(new JLabel("Please select font size"), c);
-
-
+				
+				
 				Vector<Integer> ints=new Vector<Integer>();
 				for(int i=10;i<=40;i++){
 					ints.addElement(i);
-
+					
 				}
 				box=new JComboBox(ints);
 				box.setSize(box.getPreferredSize());
 				box.setSelectedItem(pp.getInt("SystemFontSize"));
 				c.gridy=3;
 				panel.add(box, c);
-
+				
 
 				//JOptionPane.showInputDialog(panel, "size");
 				int result = JOptionPane.showConfirmDialog(null, panel, "Customize", JOptionPane.OK_CANCEL_OPTION,
@@ -365,31 +385,35 @@ public class Total extends JPanel {
 					int size=Integer.parseInt(box.getSelectedItem().toString());
 					Font font = new Font(style, Font.PLAIN, size);
 					changeSystemFont(font);
-
+				
 					SwingUtilities.invokeLater(new Runnable()
 					{
-						@Override
+					    @Override
 						public void run()
-						{
-							Rectangle bounds = plain.drawroom.getViewport().getViewRect();
-							JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
-							JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
-							vertical.setValue( (vertical.getMaximum() - bounds.height)  );
-						}
+					    {System.out.println(10);
+					    	System.out.println("i am here scrollbar");
+					        Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+					        JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
+					        JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+					        vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+					    }
 					});
 				} else {
 					return;
+
 				}
+				//JOptionPane.showMessageDialog(null, new JLabel("new grammar successfully imported"));
 			}
-
+			
 		});
-
+//		menu.customize.addItemListener(new FontChooserComboBox());
 
 
 
 		menu.clauseentering.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println(12);
 				removeAll();
 				GridBagConstraints c = new GridBagConstraints();
 				c.gridx = 0;
@@ -397,6 +421,7 @@ public class Total extends JPanel {
 				c.weightx = 1;
 				c.weighty = 1;
 				c.fill = GridBagConstraints.BOTH;
+				//add(clause, c);
 				revalidate();
 
 			}
@@ -405,6 +430,7 @@ public class Total extends JPanel {
 		menu.teacher.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println(13);
 				removeAll();
 				GridBagConstraints c = new GridBagConstraints();
 				c.gridx = 0;
@@ -423,6 +449,7 @@ public class Total extends JPanel {
 		menu.parse.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				System.out.println(14);
 				treeMode.status="practice";
 				treeMode.sentenceTree.status="practice";
 				removeAll();
@@ -446,18 +473,18 @@ public class Total extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent ae) {
-
+				
 				JFileChooser fileChooser = new JFileChooser();
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				fileChooser.setCurrentDirectory(new File(location.getFile()));
-				fileChooser.setPreferredSize(new Dimension(700,700));
+		        fileChooser.setCurrentDirectory(new File(location.getFile()));
+		        fileChooser.setPreferredSize(new Dimension(700,700));
 				int condition = fileChooser.showOpenDialog(null);
 				if (condition == JFileChooser.APPROVE_OPTION) {
 					File file = fileChooser.getSelectedFile();
 					try {			
 						grammarInput = Preference.readFile(file.getPath(), Charset.defaultCharset());
 						Grammar newg=new Grammar(grammarInput);
-
+						
 						if (newg.successfully_created()) {
 							grammar.changeToGrammar(newg);
 							pp.setString("grammar_text", grammarInput);
@@ -484,12 +511,14 @@ public class Total extends JPanel {
 
 			public void saveMap() {
 				treeMode.saveTree();
+				System.out.println(16);
 				SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
 				String output = store.outputTXT2(treeMode.sentenceTree.sentence);
 				JFileChooser chooser = new JFileChooser();
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				chooser.setCurrentDirectory(new File(location.getFile()));
-				chooser.setPreferredSize(new Dimension(700,700));
+		        System.out.println(location.getFile());
+		        chooser.setCurrentDirectory(new File(location.getFile()));
+		        chooser.setPreferredSize(new Dimension(700,700));
 				int retrival = chooser.showSaveDialog(null);
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
@@ -507,21 +536,23 @@ public class Total extends JPanel {
 				saveMap();
 			}
 		});
-
+		
 		menu.saveanswer.addActionListener(new ActionListener() {
 
 			public void saveMap2() {
 				treeMode.saveTree();
+				System.out.println(16);
 				SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
 				String output = store.outputTXT3(treeMode.sentenceTree.sentence);
 				JFileChooser chooser = new JFileChooser();
 				chooser.setPreferredSize(new Dimension(700,700));
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				chooser.setCurrentDirectory(new File(location.getFile()));
-
-
-
-
+		        System.out.println(location.getFile());
+		        chooser.setCurrentDirectory(new File(location.getFile()));
+		        
+		        
+		        
+		        
 				int retrival = chooser.showSaveDialog(null);
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
@@ -540,11 +571,11 @@ public class Total extends JPanel {
 				saveMap2();
 			}
 		});
-
-
+		
+		
 		menu.save.addActionListener(new ActionListener(){
 			String output;
-
+			
 			public void saved() throws IOException{
 				JOptionPane.showMessageDialog(null,"File successfully saved as "+file.getName()+" and "+file.getName()+".txt " +"into designated directory" );
 				FileWriter fw = new FileWriter(file + ".txt");
@@ -554,13 +585,14 @@ public class Total extends JPanel {
 				FileWriter fw2 = new FileWriter(file);
 				fw2.write(output2.toString());
 				fw2.close();
-
+				
 			}
+			
 
-
-
+		
 			public void saveMap() throws IOException {
 				treeMode.saveTree();
+				System.out.println(16);
 				SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
 				output = store.outputTXT(treeMode.sentenceTree.sentence);
 				saved();
@@ -571,99 +603,120 @@ public class Total extends JPanel {
 				try {
 					saveMap();
 				} catch (IOException e1) {
+					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
-
+			
 		});
-
+		
 		menu.savetreeas.addActionListener(new ActionListener() {
-			File file1;
+			 File file1;
+			 
+			 public void saveMap() {
+//					treeMode.saveTree();
+//					System.out.println(16);
+//					SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
+//					output = store.outputTXT(treeMode.sentenceTree.sentence);
+				 	
+					JFileChooser chooser = new JFileChooser();
+					URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
+			        System.out.println(location.getFile());
+			        chooser.setCurrentDirectory(new File(location.getFile()));
+			        chooser.setPreferredSize(new Dimension(700,700));
 
-			public void saveMap() {
-				JFileChooser chooser = new JFileChooser();
-				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				chooser.setCurrentDirectory(new File(location.getFile()));
-				chooser.setPreferredSize(new Dimension(700,700));
+					int retrival = chooser.showSaveDialog(null);
+					if (retrival == JFileChooser.APPROVE_OPTION) {
+						treeMode.drawingPanel.getlocationcor();
+							file1 =chooser.getSelectedFile();
+							//enterpassword();
+							 BufferedImage image = new BufferedImage(
+			            		      treeMode.drawingPanel.drawroom.canvas.getWidth(),
+			            		      treeMode.drawingPanel.drawroom.canvas.getHeight(),
+			            		      BufferedImage.TYPE_INT_RGB
+			            		      );
+							if(menu.turnoffRC.isEnabled()){
+								treeMode.drawingPanel.turnoffRC();
+								treeMode.drawingPanel.drawroom.canvas.paint(image.getGraphics() );
+								treeMode.drawingPanel.turnonRC();
+							}else{ 
+			             	treeMode.drawingPanel.drawroom.canvas.paint(image.getGraphics() );}
+			             	Rectangle rec=treeMode.drawingPanel.drawroom.getViewport().getViewRect();
+			             	Plain uu=treeMode.drawingPanel;
+			             	int x=rec.x;
+			             	int y=rec.y;
+			             	int w=rec.width;
+			             	int h=rec.height;
+			             	System.out.println(x+"."+y+"."+w+"."+h);
+//			             	System.out.println(treeMode.drawingPanel.drawroom.getViewport().getViewRect().getX());
+//			             	System.out.println(treeMode.drawingPanel.drawroom.getViewport().getViewRect().getY());
+//			             	System.out.println(treeMode.drawingPanel.drawroom.getViewport().getViewRect().getWidth());
+//			             	System.out.println(treeMode.drawingPanel.drawroom.getViewport().getViewRect().getHeight());
+			             	    image = image.getSubimage(uu.locationx,uu.locationy,uu.locationw,uu.locationh); // 500 x 500
+			              	try {
+			                      // write the image as a PNG
+			                      ImageIO.write(
+			                        image,
+			                        "png",
+			                        new File(file1+".png"));
+			                    } catch(Exception ex) {
+			                      ex.printStackTrace();
+			                    }
 
-				int retrival = chooser.showSaveDialog(null);
-				if (retrival == JFileChooser.APPROVE_OPTION) {
-					treeMode.drawingPanel.getlocationcor();
-					file1 =chooser.getSelectedFile();
-					//enterpassword();
-					BufferedImage image = new BufferedImage(
-							treeMode.drawingPanel.drawroom.canvas.getWidth(),
-							treeMode.drawingPanel.drawroom.canvas.getHeight(),
-							BufferedImage.TYPE_INT_RGB
-							);
-					if(menu.turnoffRC.isEnabled()){
-						treeMode.drawingPanel.turnoffRC();
-						treeMode.drawingPanel.drawroom.canvas.paint(image.getGraphics() );
-						treeMode.drawingPanel.turnonRC();
-					}else{ 
-						treeMode.drawingPanel.drawroom.canvas.paint(image.getGraphics() );}
-					Rectangle rec=treeMode.drawingPanel.drawroom.getViewport().getViewRect();
-					Plain uu=treeMode.drawingPanel;
-					int x=rec.x;
-					int y=rec.y;
-					int w=rec.width;
-					int h=rec.height;
-					image = image.getSubimage(uu.locationx,uu.locationy,uu.locationw,uu.locationh); // 500 x 500
-					try {
-						// write the image as a PNG
-						ImageIO.write(
-								image,
-								"png",
-								new File(file1+".png"));
-					} catch(Exception ex) {
-						ex.printStackTrace();
+			               
+						
 					}
-
-
-
+					else{
+						//NOTsaved();
+					}
 				}
-				else{
-					//NOTsaved();
-				}
-			}
 
-
-			@Override
+			
+             @Override
 			public void actionPerformed(ActionEvent e) {
-
-				saveMap();
-
-			};
-
-		});
-
+             	
+             	saveMap();
+             	
+             };
+		
+		 });
+		
 		treeMode.teacherPanel.check.addActionListener(new ActionListener(){
 
 			@Override
-			public void actionPerformed(ActionEvent e) {				
-				treeMode.saveTree();
-				treeMode.teacherPanel.checkanswer();
-				SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
-				String output = store.outputTXT3(treeMode.sentenceTree.sentence);
-
-				try {
-					FileWriter fw = new FileWriter(ans + ".txt");
-					fw.write(output.toString());
-					fw.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				
+					treeMode.saveTree();
+					System.out.println(16);
+					treeMode.teacherPanel.checkanswer();
+					SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
+					String output = store.outputTXT3(treeMode.sentenceTree.sentence);
+					
+							try {
+								
+								System.out.println("I am here");
+								FileWriter fw = new FileWriter(ans + ".txt");
+								fw.write(output.toString());
+								fw.close();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							
+					
+//					}
 
 			}
-
-
+			
+			
 		});
-
+		
 		menu.saveas.addActionListener(new ActionListener(){
 			File file;
 			String output;
 			String passwords;
-
+			
 			public void saved() throws IOException{
 				JOptionPane.showMessageDialog(null,"File successfully saved as "+file.getName()+" and "+file.getName()+".txt " +"into designated directory" );
 				FileWriter fw = new FileWriter(file + ".txt");
@@ -673,7 +726,7 @@ public class Total extends JPanel {
 				FileWriter fw2 = new FileWriter(file);
 				fw2.write(output2.toString());
 				fw2.close();
-
+				
 			}
 			public void NOTsaved(){
 				JOptionPane.showMessageDialog(null,"Saving Action Cancelled." );
@@ -692,7 +745,7 @@ public class Total extends JPanel {
 				c.gridy = 1;
 				c.fill = GridBagConstraints.BOTH;
 				passwordPanel.add(password, c);
-
+				
 				int result = JOptionPane.showConfirmDialog(null, passwordPanel, "Password", JOptionPane.OK_CANCEL_OPTION,
 						JOptionPane.PLAIN_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
@@ -700,6 +753,7 @@ public class Total extends JPanel {
 						passwords=password.getText();
 						saved();
 					} catch (IOException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else {
@@ -709,19 +763,21 @@ public class Total extends JPanel {
 			}
 			public void saveMap() {
 				treeMode.saveTree();
+				System.out.println(16);
 				SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
 				output = store.outputTXT(treeMode.sentenceTree.sentence);
 				JFileChooser chooser = new JFileChooser();
 				chooser.setPreferredSize(new Dimension(700,700));
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				chooser.setCurrentDirectory(new File(location.getFile()));
+		        System.out.println(location.getFile());
+		        chooser.setCurrentDirectory(new File(location.getFile()));
 
 				int retrival = chooser.showSaveDialog(null);
 				if (retrival == JFileChooser.APPROVE_OPTION) {
-
-					file =chooser.getSelectedFile();
-					enterpassword();
-
+					
+						file =chooser.getSelectedFile();
+						enterpassword();
+					
 				}
 				else{
 					NOTsaved();
@@ -732,14 +788,14 @@ public class Total extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				saveMap();
 			}
-
+			
 		});
 		//the open for default student mode
 		menu.open2.addActionListener(new ActionListener(){			
 
 			String text;
-
-
+			
+			
 			public void studentmode(){				
 				treeMode.practiceMode();
 				menu.studentmode();
@@ -754,58 +810,61 @@ public class Total extends JPanel {
 				treeMode.sentenceTree.selectNode();
 				revalidate();
 			}
-
-
+		
+			
 			public void action(){
 
 
-				JFrame f=new JFrame();
-				final JDialog loading = new JDialog(f);
-				JPanel p1 = new JPanel();
-				p1.add(new JLabel("Loading..."));
-				loading.setUndecorated(true);
-				loading.getContentPane().add(p1);
-				loading.pack();
-				loading.setLocationRelativeTo(null);
-				loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-				loading.setModal(true);
+			    JFrame f=new JFrame();
+			    final JDialog loading = new JDialog(f);
+			    JPanel p1 = new JPanel();
+			    p1.add(new JLabel("Loading..."));
+			    loading.setUndecorated(true);
+			    loading.getContentPane().add(p1);
+			    loading.pack();
+			    loading.setLocationRelativeTo(null);
+			    loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			    loading.setModal(true);
 
-				SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-					@Override
-					protected String doInBackground() throws InterruptedException {
-						/** Execute some operation */   studentmode();
-						return "e";
-					}
-					@Override
-					protected void done() {
-						loading.dispose();
-						treeMode.sentenceTree.sentence.setPreferredSize(treeMode.sentenceTree.sentence.getPreferredSize());
+			    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+			        @Override
+			        protected String doInBackground() throws InterruptedException {
+			            /** Execute some operation */   studentmode();
+			            return "e";
+			        }
+			        @Override
+			        protected void done() {
+			            loading.dispose();
+			            treeMode.sentenceTree.sentence.setPreferredSize(treeMode.sentenceTree.sentence.getPreferredSize());
+					//	System.out.println("stree's preferred size"+treeMode.sentenceTree.sentence.getPreferredSize());
 						revalidate();
-					}
-				};
-				worker.execute();
-				loading.setVisible(true);
-				try {
-					worker.get();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
+			        }
+			    };
+			    worker.execute();
+			    loading.setVisible(true);
+			    try {
+			        worker.get();
+			    } catch (Exception e1) {
+			        e1.printStackTrace();
+			    }
+		
 			}
-
+			
 
 			public void saveMap2() {
 				treeMode.saveTree();
+				System.out.println(16);
 				SentenceSetStorage store = new SentenceSetStorage(grammar,menu);
 				String output = store.outputTXT3(treeMode.sentenceTree.sentence);
 				JFileChooser chooser = new JFileChooser();
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				chooser.setCurrentDirectory(new File(location.getFile()));
-				chooser.setPreferredSize(new Dimension(700,700));
-				chooser.setDialogTitle("Please designate a place to save answer in progress file");
+		        System.out.println(location.getFile());
+		        chooser.setCurrentDirectory(new File(location.getFile()));
+		        chooser.setPreferredSize(new Dimension(700,700));
+		        chooser.setDialogTitle("Please designate a place to save answer in progress file");
 
 				int retrival = chooser.showSaveDialog(null);
-
+				
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
 						ans=chooser.getSelectedFile();
@@ -818,16 +877,18 @@ public class Total extends JPanel {
 				}
 			}
 
-
+			
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 				treeMode.teacherPanel.clean.doClick();
 				JFrame f = new JFrame();
 				JFileChooser fileChooser = new JFileChooser();
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				fileChooser.setCurrentDirectory(new File(location.getFile()));
-				fileChooser.setPreferredSize(new Dimension(700,700));
+		        System.out.println(location.getFile());
+		        fileChooser.setCurrentDirectory(new File(location.getFile()));
+		        fileChooser.setPreferredSize(new Dimension(700,700));
 
 				int result = fileChooser.showOpenDialog(f);
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -841,37 +902,38 @@ public class Total extends JPanel {
 							text=input;
 						}else{
 							text=en;
+							System.out.println("ji"+text+"lp");
 						}
-
+						
 						if(key.containPassword(text)){
 							universalpassword=key.getpassword(text);
 							text=key.getTextWithoutPassword(text);
 						}else{
 							universalpassword="";
 						}
-
+						
 						action();
 						saveMap2();
-
-					} catch (IOException ex) {
+						
+			 		} catch (IOException ex) {
 
 					}
 
 				}
-
+			
 			}
-
-
-
+			
+		
+			
 		});
-
-
+		
+		
 		menu.openanswerp.addActionListener(new ActionListener(){
-
+			
 
 			String text;
-
-
+			
+			
 			public void studentmode(){				
 				treeMode.practiceMode();
 				menu.studentmode();
@@ -881,59 +943,63 @@ public class Total extends JPanel {
 				treeMode.sentenceTree.sentence.studentupdate();
 				treeMode.sentenceTree.sentence.expandPath(new TreePath(treeMode.sentenceTree.sentence.root));
 				treeMode.sentenceTree.sentence.setSelectedNode(treeMode.sentenceTree.sentence.instructionNode);
+				//treeMode.sentenceTree.sentence.setSelectionPath(new TreePath(treeMode.sentenceTree.sentence.instructionNode));
 				treeMode.sentenceTree.presentNode=treeMode.sentenceTree.sentence.instructionNode;
 				treeMode.sentenceTree.selectNode();
 				revalidate();
 			}
-
-
+		
+			
 			public void action(){
 
 
-				JFrame f=new JFrame();
-				final JDialog loading = new JDialog(f);
-				JPanel p1 = new JPanel();
-				p1.add(new JLabel("Loading..."));
-				loading.setUndecorated(true);
-				loading.getContentPane().add(p1);
-				loading.pack();
-				loading.setLocationRelativeTo(null);
-				loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-				loading.setModal(true);
+			    JFrame f=new JFrame();
+			    final JDialog loading = new JDialog(f);
+			    JPanel p1 = new JPanel();
+			    p1.add(new JLabel("Loading..."));
+			    loading.setUndecorated(true);
+			    loading.getContentPane().add(p1);
+			    loading.pack();
+			    loading.setLocationRelativeTo(null);
+			    loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+			    loading.setModal(true);
 
-				SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-					@Override
-					protected String doInBackground() throws InterruptedException {
-						/** Execute some operation */   studentmode();
-						return "e";
-					}
-					@Override
-					protected void done() {
-						loading.dispose();
-						treeMode.sentenceTree.sentence.setPreferredSize(treeMode.sentenceTree.sentence.getPreferredSize());
+			    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+			        @Override
+			        protected String doInBackground() throws InterruptedException {
+			            /** Execute some operation */   studentmode();
+			            return "e";
+			        }
+			        @Override
+			        protected void done() {
+			            loading.dispose();
+			            treeMode.sentenceTree.sentence.setPreferredSize(treeMode.sentenceTree.sentence.getPreferredSize());
+					//	System.out.println("stree's preferred size"+treeMode.sentenceTree.sentence.getPreferredSize());
 						revalidate();
-					}
-				};
-				worker.execute();
-				loading.setVisible(true);
-				try {
-					worker.get();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
+			        }
+			    };
+			    worker.execute();
+			    loading.setVisible(true);
+			    try {
+			        worker.get();
+			    } catch (Exception e1) {
+			        e1.printStackTrace();
+			    }
+		
 			}
-
+			
 
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 				treeMode.teacherPanel.clean.doClick();
 				JFrame f = new JFrame();
 				JFileChooser fileChooser = new JFileChooser();
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				fileChooser.setCurrentDirectory(new File(location.getFile()));
-				fileChooser.setPreferredSize(new Dimension(700,700));
+		        System.out.println(location.getFile());
+		        fileChooser.setCurrentDirectory(new File(location.getFile()));
+		        fileChooser.setPreferredSize(new Dimension(700,700));
 
 				int result = fileChooser.showOpenDialog(f);
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -947,30 +1013,31 @@ public class Total extends JPanel {
 							text=input;
 						}else{
 							text=en;
+							System.out.println("ji"+text+"lp");
 						}
-
+						
 						if(key.containPassword(text)){
 							universalpassword=key.getpassword(text);
 							text=key.getTextWithoutPassword(text);
 						}else{
 							universalpassword="";
 						}
-
+						
 						action();
-
-					} catch (IOException ex) {
+						
+			 		} catch (IOException ex) {
 
 					}
 
 				}
-
+			
 			}
-
-
-
-
+			
+		
+			
+		
 		});
-
+		
 
 		menu.open.addActionListener(new ActionListener(){			
 			String passwords;
@@ -978,7 +1045,7 @@ public class Total extends JPanel {
 			public void teachermode(){
 				treeMode.teacherMode();
 				menu.teachermode();
-
+				
 				permission="teacher";
 				SentenceSetStorage tool=new SentenceSetStorage(grammar,menu);
 				tool.setTree(text,treeMode.sentenceTree.sentence,1);
@@ -986,7 +1053,7 @@ public class Total extends JPanel {
 				treeMode.sentenceTree.sentence.expandPath(new TreePath(treeMode.sentenceTree.sentence.root));
 				revalidate();
 			}
-
+			
 			public void studentmode(){				
 				treeMode.practiceMode();
 				menu.studentmode();
@@ -1011,29 +1078,29 @@ public class Total extends JPanel {
 				c.gridwidth=2;
 				c.fill = GridBagConstraints.BOTH;
 				modePanel.add(new JLabel("With password:"), c);
-
+				
 				final JButton student=new JButton("Student Mode");
 				c.gridx = 1;
 				c.gridy = 2;
 				c.fill = GridBagConstraints.BOTH;
 				c.gridwidth=1;
 				modePanel.add(student, c);
-
+				
 				c.gridx = 0;
 				c.gridy = 1;
 				c.fill = GridBagConstraints.BOTH;
 				c.gridwidth=1;
 				modePanel.add(password, c);
-
+				
 				final JButton teacher=new JButton("Teacher Mode");
 				c.gridx = 1;
 				c.gridy = 1;
 				c.fill = GridBagConstraints.BOTH;
 				c.gridwidth=1;
 				modePanel.add(teacher, c);
-
-
-
+				
+				
+		
 
 				c.gridx = 0;
 				c.gridy = 2;
@@ -1048,18 +1115,18 @@ public class Total extends JPanel {
 							text=new StrongAES().getTextWithoutPassword(text);
 							teachermode();
 							Window w = SwingUtilities.getWindowAncestor(teacher);
-							if (w != null) {
-								w.setVisible(false);
-							}
+						    if (w != null) {
+						      w.setVisible(false);
+						    }
 						}else{
 							JOptionPane.showMessageDialog(null, new JLabel("password not correct, please enter again or choose student mode"));;
 						}
-
-
+						
+					  
 					}
-
+					
 				});
-
+				
 				student.addActionListener(new ActionListener(){
 
 					@Override
@@ -1067,53 +1134,53 @@ public class Total extends JPanel {
 						text=new StrongAES().getTextWithoutPassword(text);
 						studentmode();
 						Window w = SwingUtilities.getWindowAncestor(student);
-						if (w != null) {
-							w.setVisible(false);
-						}
-
+					    if (w != null) {
+					      w.setVisible(false);
+					    }
+					  
 					}
-
+					
 				});
-
+							
 
 				JOptionPane.showOptionDialog(null, 
-						modePanel, 
-						"Mode Chooser", 
-						JOptionPane.OK_CANCEL_OPTION, 
-						JOptionPane.INFORMATION_MESSAGE, 
-						null, 
-						new String[]{"Cancel"}, // this is the array
-						"default");
-
-
-
-
+				        modePanel, 
+				        "Mode Chooser", 
+				        JOptionPane.OK_CANCEL_OPTION, 
+				        JOptionPane.INFORMATION_MESSAGE, 
+				        null, 
+				        new String[]{"Cancel"}, // this is the array
+				        "default");
+				
+				
+				
+				
 			}
-
-
+			
+			
 			public void simpleModeChoose(){
 
 				final JPanel modePanel=new JPanel();
 				modePanel.setLayout(new GridBagLayout());
 				GridBagConstraints c = new GridBagConstraints();
-
-
+				
+				
 				final JButton student=new JButton("Student Mode");
 				c.gridx = 0;
 				c.gridy = 0;
 				c.fill = GridBagConstraints.BOTH;
 				c.gridwidth=1;
 				modePanel.add(student, c);
-
-
+				
+					
 				final JButton teacher=new JButton("Teacher Mode");
 				c.gridx = 1;
 				c.gridy = 0;
 				c.fill = GridBagConstraints.BOTH;
 				c.gridwidth=1;
 				modePanel.add(teacher, c);
-
-
+				
+				
 
 				teacher.addActionListener(new ActionListener(){
 
@@ -1121,86 +1188,89 @@ public class Total extends JPanel {
 					public void actionPerformed(ActionEvent e) {
 						teachermode();
 						Window w = SwingUtilities.getWindowAncestor(teacher);
-						if (w != null) {
-							w.setVisible(false);
-						}
-
+					    if (w != null) {
+					      w.setVisible(false);
+					    }
+					  
 					}
-
+					
 				});
-
+				
 				student.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent e) {
 						Window w = SwingUtilities.getWindowAncestor(student);
-						if (w != null) {
-							w.setVisible(false);
-						}
-						JFrame f=new JFrame();
-						final JDialog loading = new JDialog(f);
-						JPanel p1 = new JPanel();
-						p1.add(new JLabel("Loading..."));
-						loading.setUndecorated(true);
-						loading.getContentPane().add(p1);
-						loading.pack();
-						loading.setLocationRelativeTo(null);
-						loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-						loading.setModal(true);
+					    if (w != null) {
+					      w.setVisible(false);
+					    }
+					    JFrame f=new JFrame();
+					    final JDialog loading = new JDialog(f);
+					    JPanel p1 = new JPanel();
+					    p1.add(new JLabel("Loading..."));
+					    loading.setUndecorated(true);
+					    loading.getContentPane().add(p1);
+					    loading.pack();
+					    loading.setLocationRelativeTo(null);
+					    loading.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+					    loading.setModal(true);
 
-						SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-							@Override
-							protected String doInBackground() throws InterruptedException {
-								/** Execute some operation */   studentmode();
-								return "e";
-							}
-							@Override
-							protected void done() {
-								loading.dispose();
-								treeMode.sentenceTree.sentence.setPreferredSize(treeMode.sentenceTree.sentence.getPreferredSize());
+					    SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+					        @Override
+					        protected String doInBackground() throws InterruptedException {
+					            /** Execute some operation */   studentmode();
+					            return "e";
+					        }
+					        @Override
+					        protected void done() {
+					            loading.dispose();
+					            treeMode.sentenceTree.sentence.setPreferredSize(treeMode.sentenceTree.sentence.getPreferredSize());
+							//	System.out.println("stree's preferred size"+treeMode.sentenceTree.sentence.getPreferredSize());
 								revalidate();
-							}
-						};
-						worker.execute();
-						loading.setVisible(true);
-						try {
-							worker.get();
-						} catch (Exception e1) {
-							e1.printStackTrace();
-						}
+					        }
+					    };
+					    worker.execute();
+					    loading.setVisible(true);
+					    try {
+					        worker.get();
+					    } catch (Exception e1) {
+					        e1.printStackTrace();
+					    }
+			
 
-
-
+					  
 					}
-
+					
 				});
-
+							
 
 				JOptionPane.showOptionDialog(null, 
-						modePanel, 
-						"Mode Chooser", 
-						JOptionPane.OK_CANCEL_OPTION, 
-						JOptionPane.INFORMATION_MESSAGE, 
-						null, 
-						new String[]{"Cancel"}, // this is the array
-						"default");
-
-
-
-
-
+				        modePanel, 
+				        "Mode Chooser", 
+				        JOptionPane.OK_CANCEL_OPTION, 
+				        JOptionPane.INFORMATION_MESSAGE, 
+				        null, 
+				        new String[]{"Cancel"}, // this is the array
+				        "default");
+				
+				
+				
+				
+			
 			}
-
+			
 
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 				treeMode.teacherPanel.clean.doClick();
 				JFrame f = new JFrame();
 				JFileChooser fileChooser = new JFileChooser();
 				URL location = Total.class.getProtectionDomain().getCodeSource().getLocation();
-				fileChooser.setCurrentDirectory(new File(location.getFile()));
-				fileChooser.setPreferredSize(new Dimension(700,700));
+		        System.out.println(location.getFile());
+		        fileChooser.setCurrentDirectory(new File(location.getFile()));
+		        fileChooser.setPreferredSize(new Dimension(700,700));
 
 				int result = fileChooser.showOpenDialog(f);
 				if (result == JFileChooser.APPROVE_OPTION) {
@@ -1208,121 +1278,141 @@ public class Total extends JPanel {
 					try {
 						byte bt[] = Files.readAllBytes(file.toPath());
 						String en = new String(bt, "UTF-8");
+//						byte bt[] = Files.readAllBytes(file.toPath());
+//						String input = new String(bt, "UTF-8");
+//						SentenceSetStorage tool=new SentenceSetStorage(grammar,menu);
+//						tool.setTree(input,treeMode.sentenceTree.sentence);
+//						treeMode.sentenceTree.sentence.expandPath(new TreePath(treeMode.sentenceTree.sentence.root));
 						StrongAES key=new StrongAES();
 						if(!file.getName().contains(".txt")){
 							String input=key.decrypt(en);
 							text=input;
 						}else{
 							text=en;
+							System.out.println("ji"+text+"lp");
 						}
-
+						
 						if(key.containPassword(text)){
 							passwords=key.getpassword(text);
 							enterPassword();
 						}else{
 							simpleModeChoose();
 						}
-
-					} catch (IOException ex) {
+						
+			 		} catch (IOException ex) {
 
 					}
 
 				}
-
+			
 			}
-
-
-
+			
+		
+			
 		});
-
+	
 		menu.edit.addMouseMotionListener(new MouseAdapter(){
-
+			
 			@Override
 			public void mouseMoved(MouseEvent e){
 
 				menu.undo.setEnabled(plain.canUndo());
-				menu.redo.setEnabled(plain.canRedo());
+	            menu.redo.setEnabled(plain.canRedo());
 			}
 		});
-
+		
 		menu.redo.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
 				if(plain.canRedo()){
 					plain.redo();
 				}
 			}
-
+			
 		});
-
-
+		
+		
 		menu.undo.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				System.out.println("menu undo");
 				if(plain.canUndo()){
+					System.out.println("menu undo inside");
 					plain.undo();
-
+					
 				}
 			}
-
+			
 		});
-
+		
+//		String text=pp.getString("text");
+//		SentenceSetStorage tool=new SentenceSetStorage(grammar,menu);
+//		tool.setTree(text,treeMode.sentenceTree.sentence,2);
+//		treeMode.sentenceTree.sentence.studentupdate();
+//		treeMode.sentenceTree.sentence.expandPath(new TreePath(treeMode.sentenceTree.sentence.root));
+//		treeMode.sentenceTree.sentence.setSelectedNode(treeMode.sentenceTree.sentence.instructionNode);
+//		//treeMode.sentenceTree.sentence.setSelectionPath(new TreePath(treeMode.sentenceTree.sentence.instructionNode));
+//		treeMode.sentenceTree.presentNode=treeMode.sentenceTree.sentence.instructionNode;
+//		treeMode.sentenceTree.selectNode();
 	}
 
 	private void changeSystemFont(Font font){
 
 		String style=font.getFontName();
 		int size=font.getSize();
-
+		
 		//set preference's SystemFontSize and FontStyle
 		pp.setInt("SystemFontSize", size);
 		pp.setString("FontStyle", style);
-
+		
 		//change the font size of the display
 		{
 			//part1. everything except drawing panel font size and menubar font size
-			Stack<Component> stack=new Stack<Component>();
-			for (Component comp : Total.this.getComponents()) {
-				stack.add(comp);
-			}
-			while(stack.size()>0){
-				Component now=stack.pop();
-				now.setFont(font);
-				for (Component comp : ((Container) now).getComponents()) {
-					//avoiding changing the font size of the drawing panel
-					if(!comp.equals(plain.drawroom.canvas))
-						stack.add(comp);
-				}
-
-				//part2. menubar font size. because menu_items are not component of menus, so they are special
-				//and a special recursive-font-size-changing function is defined in LMenuBar class
-				menu.setFont(font);
-
-			}	
-
+		Stack<Component> stack=new Stack<Component>();
+		for (Component comp : Total.this.getComponents()) {
+		    stack.add(comp);
 		}
-
-
+		while(stack.size()>0){
+			Component now=stack.pop();
+			now.setFont(font);
+			for (Component comp : ((Container) now).getComponents()) {
+				//avoiding changing the font size of the drawing panel
+				if(!comp.equals(plain.drawroom.canvas))
+			    stack.add(comp);
+			}
+			
+			//part2. menubar font size. because menu_items are not component of menus, so they are special
+			//and a special recursive-font-size-changing function is defined in LMenuBar class
+		menu.setFont(font);
+		
+		}	
+			
+		}
+		
+		
 		//get the drawing panel to the lowest point
 		SwingUtilities.invokeLater(new Runnable()
 		{
-			@Override
+		    @Override
 			public void run()
-			{
-				Rectangle bounds = plain.drawroom.getViewport().getViewRect();
-				JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
-				JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
-				vertical.setValue( (vertical.getMaximum() - bounds.height)  );
-			}
+		    {
+		        Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+		        JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
+		        JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+		        vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+		    }
 		});
-
-
+	
+	
 	}
-
-
+	
+	
 	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
+		//System.out.println(18);
 		java.util.Enumeration keys = UIManager.getDefaults().keys();
 		while (keys.hasMoreElements()) {
 			Object key = keys.nextElement();
@@ -1333,29 +1423,33 @@ public class Total extends JPanel {
 	}
 
 	private void createAndShowUI() {
+		System.out.println(19);
 		JFrame frame = new JFrame("UCLA-PPP Parsing Practice Program");
 		Total total = Total.this;
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		int xSize = ((int) tk.getScreenSize().getWidth()-400);
 		int ySize = ((int) tk.getScreenSize().getHeight());
 		frame.setPreferredSize(new Dimension(xSize, ySize));
+		//frame.add(total.menu, BorderLayout.NORTH);
 		frame.add(total, BorderLayout.CENTER);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
-
-
+		
+		
 		SwingUtilities.invokeLater(new Runnable()
 		{
-			@Override
+		    @Override
 			public void run()
-			{
-				Rectangle bounds = plain.drawroom.getViewport().getViewRect();
-				JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
-				vertical.setValue( (vertical.getMaximum() - bounds.height)  );
-			}
+		    {
+		    	System.out.println(20);
+		        Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+		        JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
+		        JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+		        vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+		    }
 		});
 
 	}
@@ -1367,7 +1461,7 @@ public class Total extends JPanel {
 			public void run() {
 				final Total t=new Total();
 				t.createAndShowUI();
-
+				
 
 			}
 		});

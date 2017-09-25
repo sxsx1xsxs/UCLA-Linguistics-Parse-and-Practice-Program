@@ -280,6 +280,54 @@ public class Grammar{
 		
 	}
 
+	//return null if obeying rules
+	//return the error message if there is something wrong
+//	public String obeyRules(String headt, Vector<String> jiji) {
+//		
+//		//if it's not defined nodes
+//		if(!set.contains(headt)){
+//			return "Warning: "+headt+" is not a defined node;";
+//		}
+//		//if it has no children
+//		else if(jiji.size()==0){
+//			return "Caution: "+ headt+" is incomplete;";
+//		}
+//		//if it cannot be terminal node
+//		if(!setBasic.contains(headt)){
+//			//if it's connected to any word nodes
+//			for(NodeLabel cc:jiji){
+//				if(cc.type==1){
+//					return "Warning: "+headt+" is not a terminal node, it cannot have a word node as its daughter;";
+//				}
+//			}
+//		}
+//		//if it cannot be intermediate node
+//		if(!medium.contains(headt)){
+//			if(jiji.size()>1||jiji.elementAt(0).type!=1){
+//				return "Warning: "+headt+" is a terminal node, it can only have one word node as its daughter;";
+//			}else{
+//					return null;			
+//			}
+//		}
+//		
+//		//now only the situation of medium nodes
+//		//either has illegal childen or cannot be formed by
+//		HeadRule now=null;
+//		for(HeadRule hr:headRules){
+//			if(hr.head.equals(headt)){
+//				now=hr;
+//				break;
+//			}
+//		}
+//		
+//			if(now.obeyRule(headt, jiji)){
+//				return null;
+//			}
+//			else{		
+//				return now.error;}
+//			
+//	}
+
 
 
 	public static void main(String args[]){

@@ -273,6 +273,8 @@ public class Rule {
 		units.add("CP");
 		units.add("Conj");
 		units.add("CP");
+		//System.out.println(test.obeyRule(units));	
+		//System.out.println(test.grammarError);
 	}
 	
 	

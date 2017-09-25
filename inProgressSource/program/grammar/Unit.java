@@ -1,6 +1,9 @@
 package program.grammar;
-public class Unit extends Block{
-	//inherited attributes
+
+
+
+class Unit extends Block{
+//inherited attributes
 //	/*
 //	 * property of the block
 //	 * 1. optional represented by ()
@@ -29,25 +32,25 @@ public class Unit extends Block{
 	
 	public Unit(String input){
 		super(input);
-		if(input.equals("(")){
+		if(input=="("){
 			position="left";
 			property="optional";
-		}else if(input.equals(")")){
+		}else if(input==")"){
 			position="right";
 			property="optional";
-		}else if(input.equals("{")){
+		}else if(input=="{"){
 			position="left";
 			property="substitute";
-		}else if(input.equals("}")){
+		}else if(input=="}"){
 			position="right";
 			property="substitute";
-		}else if(input.equals("[")){
+		}else if(input=="["){
 			position="left";
 			property="together";
-		}else if(input.equals("]")){
+		}else if(input=="]"){
 			position="right";
 			property="together";
-		}else if(input.equals("*")){
+		}else if(input=="*"){
 			position="right";
 			property="repetitive";
 		}
