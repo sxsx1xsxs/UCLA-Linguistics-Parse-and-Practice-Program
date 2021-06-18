@@ -81,8 +81,8 @@ public class Total extends JPanel {
 		treeMode.practiceMode();
 		menu.studentmode();
 
-		//treeMode.teacherMode();
-		//menu.teachermode();
+		treeMode.teacherMode();
+		menu.teachermode();
 
 		menu.topdown.setEnabled(false);
 		menu.bottomup.setEnabled(false);
@@ -1415,7 +1415,9 @@ public class Total extends JPanel {
 		int ySize = ((int) tk.getScreenSize().getHeight());
 		frame.setPreferredSize(new Dimension(xSize, ySize));
 		frame.add(total, BorderLayout.CENTER);
+		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("SystemFontSize")));
 		frame.setJMenuBar(menu);
+		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -1443,6 +1445,7 @@ public class Total extends JPanel {
 			x.setSize(x.label.getPreferredSize());
 		}
 		treeMode.drawingPanel.adjust();
+		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
 	}
 	public static void main(String[] args) {
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("SystemFontSize")));
