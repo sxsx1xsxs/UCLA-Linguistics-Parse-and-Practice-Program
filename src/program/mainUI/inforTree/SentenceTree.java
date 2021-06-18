@@ -231,8 +231,8 @@ public class SentenceTree extends JPanel {
 		return r;
 	}
 
-	// this function copyies the node and the node's children--
-	// basically the whole substree has a new copy
+	// this function copies the node and the node's children--
+	// basically the whole subtree has a new copy
 	public IndexNode copyWholeNode(IndexNode original) {
 		IndexNode r = copyNode(original);
 		Stack<IndexNode> process = new Stack<IndexNode>();

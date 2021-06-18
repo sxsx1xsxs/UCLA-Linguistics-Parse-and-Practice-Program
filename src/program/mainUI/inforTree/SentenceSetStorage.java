@@ -19,7 +19,7 @@ import program.mainUI.drawingPanel.Plain;
 
 //this is the tool to transform a string to a STree
 //and to transform a STree to a string
-//the user shoudl build the tool first and then call the function to get goals achieved
+//the user should build the tool first and then call the function to get goals achieved
 public class SentenceSetStorage {
 	SentenceTree sentenceTree;
 	Interface treeMode;
@@ -45,7 +45,7 @@ public class SentenceSetStorage {
 		return true;
 	}
 
-	// importing help function for importing answeing progress
+	// importing help function for importing answering progress
 	private NodeStorage transformTXT2(Vector<String> block) {
 		NodeStorage r = new NodeStorage();
 		r.index = block.elementAt(0).split(":")[1];

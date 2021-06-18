@@ -1,0 +1,234 @@
+Sentences
+*
+index:0.
+type:instruction
+instruction:This is a batch of parsing-practice sentences created by Bruce Hayes. To begin, click on a sentence in the window to the left.
+*
+index:1.
+type:sentence
+sentence:Bill remembered and told his story
+meaning:He remembered, and told his story
+structure:[S[NP[N Bill]][VP[VP[V remembered]][Conj and][VP[V told][NP[NP[Pro his]][N story]]]]]
+*
+index:2.
+type:sentence
+sentence:Bill remembered and told his story
+meaning:He remembered, and told his story
+structure:[S[NP[N Bill]][VP[VP[V remembered]][Conj and][VP[V told][NP[NP[Pronoun his]][N story]]]]]
+*
+index:3.
+type:sentence
+sentence:They summoned the man from California
+meaning:(not the man from New York)
+structure:[S[NP[Pronoun They]][VP[V summoned][NP[Art the][N man][PP[P from][NP[N California]]]]]]
+*
+index:4.
+type:sentence
+sentence:They summoned the man from California
+meaning:(He had been staying in California for some time when they summoned him.)
+structure:[S[NP[Pronoun They]][VP[V summoned][NP[Art the][N man]][PP[P from][NP[N California]]]]]
+*
+index:5.
+type:sentence
+sentence:We sent the French snails
+meaning:(they were snails that were French)
+structure:[S[NP[Pronoun We]][VP[V sent][NP[Art the][A French][N snails]]]]
+*
+index:6.
+type:sentence
+sentence:We sent the French snails
+meaning:We sent snails to the people who were French
+structure:[S[NP[Pronoun We]][VP[V sent][NP[Art the][N French]][NP[N snails]]]]
+*
+index:7.
+type:sentence
+sentence:The lonely judge trails
+meaning:(Since they have no friends, they just sit around deciding what trails are best.)
+structure:[S[NP[Art The][N lonely]][VP[V judge][NP[N trails]]]]
+*
+index:8.
+type:sentence
+sentence:The lonely judge trails
+meaning:(Many people in the race are ahead of the lonely judge.)
+structure:[S[NP[Art The][AP[A lonely]][N judge]][VP[V trails]]]
+*
+index:9.
+type:sentence
+sentence:the boy and the girl's bicycle
+meaning:(a boy and a bicycle)
+structure:[NP[NP[Art the][N boy]][Conj and][NP[NP[Art the][N girl's]][N bicycle]]]
+*
+index:10.
+type:sentence
+sentence:the boy and the girl's bicycle
+meaning:the bicycle that belongs to both the boy and the girl
+structure:[NP[NP[NP[Art the][N boy]][Conj and][NP[Art the][N girl's]]][N bicycle]]
+*
+index:11.
+type:sentence
+sentence:The spy sent the letter to the king to his boss
+meaning:null
+structure:[S[NP[Art The][N spy]][VP[V sent][NP[Art the][N letter][PP[P to][NP[Art the][N king]]]][PP[P to][NP[NP[Pronoun his]][N boss]]]]]
+*
+index:12.
+type:sentence
+sentence:I explained the reason for the letter to the students
+meaning:(and they seemed to appreciate my giving an explanation
+structure:[S[NP[Pronoun I]][VP[V explained][NP[Art the][N reason][PP[P for][NP[Art the][N letter]]]][PP[P to][NP[Art the][N students]]]]]
+*
+index:13.
+type:sentence
+sentence:The unscrupulous snake drains
+meaning:Unethical people use the snake tool to clean out drains.
+structure:[S[NP[Art The][N unscrupulous]][VP[V snake][NP[N drains]]]]
+*
+index:14.
+type:sentence
+sentence:The unscrupulous snake drains
+meaning:The unethical snake keeps letting the water out of things.
+structure:[S[NP[Art The][AP[A unscrupulous]][N snake]][VP[V drains]]]
+*
+index:15.
+type:sentence
+sentence:We mailed the triumphant letters
+meaning:The letters were triumphant and we mailed them
+structure:[S[NP[Pro We]][VP[V mailed][NP[Art the][AP[A triumphant]][N letters]]]]
+*
+index:16.
+type:sentence
+sentence:We mailed the triumphant letters
+meaning:We mailed letters to the triumphant people
+structure:[S[NP[Pro We]][VP[V mailed][NP[Art the][N triumphant]][NP[N letters]]]]
+*
+index:17.
+type:sentence
+sentence:the toad and the frog's spots
+meaning:spots that were part of both the toad and the frog
+structure:[NP[NP[NP[Art the][N toad]][Conj and][NP[Art the][N frog's]]][N spots]]
+*
+index:18.
+type:sentence
+sentence:the toad and the frog's spots
+meaning:two things:  an animal (the toad) and a set of spots
+structure:[NP[NP[Art the][N toad]][Conj and][NP[NP[Art the][N frog's]][N spots]]]
+*
+index:19.
+type:sentence
+sentence:We sent the key to the homework to the students
+meaning:null
+structure:[S[NP[Pro We]][VP[V sent][NP[Art the][N key][PP[P to][NP[Art the][N homework]]]][PP[P to][NP[Art the][N students]]]]]
+*
+index:20.
+type:sentence
+sentence:They paid the cost of travel and tips
+meaning:The paid the cost of two things:  travel, and tips
+structure:[S[NP[Pro They]][VP[V paid][NP[Art the][N cost][P[P of][NP[NP[N travel]][Conj and][NP[N tips]]]]]]]
+*
+index:21.
+type:sentence
+sentence:They paid the cost of travel and tips
+meaning:The paid the cost of travel, and also paid some tips
+structure:[S[NP[Pro They]][VP[V paid][NP[NP[Art the][N cost][PP[P of][NP[N travel]]]][Conj and][NP[N tips]]]]]
+*
+index:22.
+type:sentence
+sentence:the author of Emma's book about persuasion
+meaning:the person who wrote the book owned by Emma which covers the topic of persuasion
+structure:[NP[Art the][N author][PP[P of][NP[NP[N Emma's]][N book][PP[P about][NP[N persuasion]]]]]]
+*
+index:23.
+type:sentence
+sentence:the author of Emma's book about persuasion
+meaning:the book about persuasion written by the author (Jane Austen) of "Emma"
+structure:[NP[NP[Art the][N author][PP[P of][NP[N Emma's]]]][N book][PP[P about][NP[N persuasion]]]]
+*
+index:24.
+type:sentence
+sentence:the length of Sue's essay about the very dangerous situation in Potiskum
+meaning:null
+structure:[NP[Art the][N length][PP[P of][NP[NP[N Sue's]][N essay][PP[P about][NP[Art the][AP[Adv very][A dangerous]][N situation][PP[P in][NP[N Potiskum]]]]]]]]
+*
+index:25.
+type:sentence
+sentence:Alice will approach and convince each customer
+meaning:Alice will do two things:  approach, and convince each customer
+structure:[S[NP[N Alice]][Aux will][VP[VP[V approach]][Conj and][VP[V convince][NP[Art each][N customer]]]]]
+*
+index:26.
+type:sentence
+sentence:Alice will approach and convince each customer
+meaning:Alice will do two things (approach and convince) to each customer
+structure:[S[NP[N Alice]][Aux will][VP[V[V approach][Conj and][V convince]][NP[Art each][N customer]]]]
+*
+index:27.
+type:sentence
+sentence:a short and completely convincing essay
+meaning:null
+structure:[NP[Art a][AP[AP[A short]][Conj and][AP[Adv completely][A convincing]]][N essay]]
+*
+index:28.
+type:sentence
+sentence:Bill's unhappy cousin's doctor's emails
+meaning:null
+structure:[NP[NP[NP[NP[N Bill's]][AP[A unhappy]][N cousin's]][N doctor's]][N emails]]
+*
+index:29.
+type:sentence
+sentence:We mailed the solution to the problem to the teacher
+meaning:null
+structure:[S[NP[Pro We]][VP[V mailed][NP[Art the][N solution][PP[P to][NP[Art the][N problem]]]][PP[P to][NP[Art the][N teacher]]]]]
+*
+index:30.
+type:sentence
+sentence:You can sell a remedy for nothing for nothing
+meaning:null
+structure:[S[NP[Pro You]][Aux can][VP[V sell][NP[Art a][N remedy][PP[P for][NP[N nothing]]]][PP[P for][NP[N nothing]]]]]
+*
+index:31.
+type:sentence
+sentence:You can sell a remedy for nothing
+meaning:a medicine that doesn't cure anything
+structure:[S[NP[Pro You]][Aux can][VP[V sell][NP[Art a][N remedy][PP[P for][NP[N nothing]]]]]]
+*
+index:32.
+type:sentence
+sentence:You can sell a remedy for nothing
+meaning:The price is free
+structure:[S[NP[Pro You]][Aux can][VP[V sell][NP[Art a][N remedy]][PP[P for][NP[N nothing]]]]]
+*
+index:33.
+type:sentence
+sentence:You can sell a remedy for nothing
+meaning:The price is free
+structure:error
+*
+index:34.
+type:sentence
+sentence:They picked her melons
+meaning:They picked melons for her
+structure:[S[NP[Pro They]][VP[V picked][NP[Pro her]][NP[N melons]]]]
+*
+index:35.
+type:sentence
+sentence:They picked her melons
+meaning:They picked melons that belonged to her
+structure:[S[NP[Pro They]][VP[V picked][NP[NP[Pro her]][N melons]]]]
+*
+index:36.
+type:sentence
+sentence:We notified Alexander's friend that he is ready
+meaning:null
+structure:[S[NP[Pro We]][VP[V notified][NP[NP[N Alexander's]][N friend]][CP[Conj that][S[NP[Pro he]][VP[V is][AP[A ready]]]]]]]
+*
+index:37.
+type:sentence
+sentence:They believe that we like Fred
+meaning:null
+structure:[S[NP[Pro They]][VP[V believe][CP[Conj that][S[NP[Pro we]][VP[V like][NP[N Fred]]]]]]]
+*
+index:38.
+type:sentence
+sentence:We announced to Susan on Wednesday that her entry had won the prize
+meaning:null
+structure:[S[NP[Pro We]][VP[V announced][PP[P to][NP[N Susan]]][PP[P on][NP[N Wednesday]]][CP[Comp that][S[NP[NP[Pro her]][N entry]][Aux had][VP[V won][NP[Art the][N prize]]]]]]]
+*

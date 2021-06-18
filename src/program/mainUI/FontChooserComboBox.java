@@ -74,24 +74,25 @@ public class FontChooserComboBox
 		//load available font names
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		String[] fontNames = ge.getAvailableFontFamilyNames();
-    Arrays.sort(fontNames);
-    this.fontNames = Arrays.asList(fontNames);
-    
-    //recent fonts
-    recentFontNames = new LinkedList<String>();
-    
-    //fill combo box
-    JLabel label = new JLabel();
-    this.previewFontSize = label.getFont().getSize();
-    updateList(null);  
-    
-    //set editor and item components
-    this.setEditable(true);
-	this.setEditor(new FontChooserComboBoxEditor());
-	this.setRenderer(new FontChooserComboBoxRenderer());
-	String x=new Preference().getString("FontStyle");
-	this.setSelectedItem(x);
-	//this.setBorder(new LineBorder(Color.gray, 1));
+
+		Arrays.sort(fontNames);
+		this.fontNames = Arrays.asList(fontNames);
+
+		//recent fonts
+		recentFontNames = new LinkedList<String>();
+
+		//fill combo box
+		JLabel label = new JLabel();
+		this.previewFontSize = label.getFont().getSize();
+		updateList(null);
+
+		//set editor and item components
+		this.setEditable(true);
+		this.setEditor(new FontChooserComboBoxEditor());
+		this.setRenderer(new FontChooserComboBoxRenderer());
+		String x=new Preference().getString("FontStyle");
+		this.setSelectedItem(x);
+		//this.setBorder(new LineBorder(Color.gray, 1));
 		
 		//listen to own item changes
 		this.addItemListener(this);

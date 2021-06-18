@@ -65,13 +65,7 @@ public class Preference {
 		}
 		
 		public int getInt(String x) {
-			if(x.equals("SystemFontSize")){
-				return prefs.getInt("SystemFontSize", default_font_size);
-			}else{
-				//??need to be improved later for error log
-				return 10;				
-			}
-
+			return prefs.getInt(x, default_font_size);
 		}
 		//>> int_setter_and_getter
 		
@@ -83,7 +77,7 @@ public class Preference {
 		
 		public String getString(String x){
 			
-			if(x.equals("FontStyle")){
+			if(x.equals("FontStyle") || x.equals("TreeFontStyle") ){
 				return prefs.get(x, default_font_name);
 			}
 			else if (x.equals("grammar_text")){

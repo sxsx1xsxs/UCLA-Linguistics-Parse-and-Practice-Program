@@ -1224,7 +1224,12 @@ public class Plain extends JLayeredPane {
 		//first adjust basic nodes' position
 		Collections.sort(words);
 		Collections.reverse(words);
-
+		double offset = 0; // The width of one space
+		if(!words.isEmpty()){ //If this is empty, it doesn't matter what offset is
+			JLabel space = new JLabel(" ");
+			space.setFont(words.get(0).label.getFont());
+			offset = space.getPreferredSize().getWidth();
+		}
 		Rectangle bounds = drawroom.getViewport().getViewRect();
 		Point zeroP= drawroom.getViewport().getViewPosition();
 		int heightdraw = (int) (bounds.height * 0.9)+zeroP.y;
@@ -1237,9 +1242,7 @@ public class Plain extends JLayeredPane {
 
 			y.setLocation(i,heightdraw);
 			y.location = y.getLocation();
-			i = (int) (i + widthIndex * y.label.getPreferredSize().getHeight());
-			i = (int) (i + y.getPreferredSize().getWidth());
-
+			i = (int) (i +  y.label.getPreferredSize().getWidth() + offset);
 
 		}
 

@@ -48,6 +48,7 @@ import program.mainUI.FontChooserComboBox;
 import program.mainUI.Interface;
 import program.mainUI.LMenuBar;
 import program.mainUI.StrongAES;
+import program.mainUI.drawingPanel.NodeLabel;
 import program.mainUI.drawingPanel.Plain;
 import program.mainUI.inforTree.SentenceSetStorage;
 
@@ -71,15 +72,8 @@ public class Total extends JPanel {
 	public Total() {
 
 		setLayout(new GridBagLayout());
-
+		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
 		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 1;
-		c.weighty = 0;
-		c.fill = GridBagConstraints.BOTH;
-		add(menu, c);
-
 
 		c.gridx = 0;
 		c.gridy = 1;
@@ -131,10 +125,8 @@ public class Total extends JPanel {
 		});
 
 		menu.format.addMouseMotionListener(new MouseAdapter(){
-
 			@Override
 			public void mouseMoved(MouseEvent e){
-
 				if(treeMode.drawingPanel.completeTree()){
 					menu.topdown.setEnabled(true);
 					menu.bottomup.setEnabled(true);
@@ -208,10 +200,7 @@ public class Total extends JPanel {
 
 				int input=pp.getInt("TreeSize")-2;
 				pp.setInt("TreeSize", input);
-
-				for (Component comp : (plain.drawroom.canvas).getComponents()) {
-					comp.setFont(new Font(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
-				}
+				updateTreeFonts();
 			}
 		});
 
@@ -221,10 +210,7 @@ public class Total extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				int input=pp.getInt("TreeSize")+2;
 				pp.setInt("TreeSize", input);
-				treeMode.sentenceTree.selectNode();
-				for (Component comp : (plain.drawroom.canvas).getComponents()) {
-					comp.setFont(new Font(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
-				}
+				updateTreeFonts();
 			}
 		});
 
@@ -318,7 +304,6 @@ public class Total extends JPanel {
 
 		});
 
-
 		menu.customize.addActionListener(new ActionListener(){
 
 			@Override
@@ -384,7 +369,70 @@ public class Total extends JPanel {
 
 		});
 
+		menu.tcustomize.addActionListener(new ActionListener(){
 
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				FontChooserComboBox fbox;
+				JComboBox box;
+
+
+				JPanel panel=new JPanel(new GridBagLayout());
+				GridBagConstraints c=new GridBagConstraints();
+				c.gridx=0;
+				c.gridy=0;
+				c.gridwidth=1;
+				c.fill=GridBagConstraints.BOTH;
+				c.insets=new Insets(10,10,10,10);
+				panel.add(new JLabel("Please select style"), c);
+
+				c.gridy=1;
+				fbox=new FontChooserComboBox();
+				panel.add(fbox, c);
+
+				c.gridy=2;
+				panel.add(new JLabel("Please select font size"), c);
+
+
+				Vector<Integer> ints=new Vector<Integer>();
+				for(int i=10;i<=40;i++){
+					ints.addElement(i);
+
+				}
+				box=new JComboBox(ints);
+				box.setSize(box.getPreferredSize());
+				box.setSelectedItem(pp.getInt("TreeSize"));
+				c.gridy=3;
+				panel.add(box, c);
+
+
+				//JOptionPane.showInputDialog(panel, "size");
+				int result = JOptionPane.showConfirmDialog(null, panel, "Customize", JOptionPane.OK_CANCEL_OPTION,
+						JOptionPane.PLAIN_MESSAGE);
+				if (result == JOptionPane.OK_OPTION) {
+
+					String style=fbox.getSelectedFontName();
+					int size=Integer.parseInt(box.getSelectedItem().toString());
+					Font font = new Font(style, Font.PLAIN, size);
+					changeTreeFont(font);
+
+					SwingUtilities.invokeLater(new Runnable()
+					{
+						@Override
+						public void run()
+						{
+							Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+							JScrollBar horizontal =plain.drawroom.getHorizontalScrollBar();
+							JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+							vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+						}
+					});
+				} else {
+					return;
+				}
+			}
+
+		});
 
 
 		menu.clauseentering.addActionListener(new ActionListener() {
@@ -540,7 +588,6 @@ public class Total extends JPanel {
 				saveMap2();
 			}
 		});
-
 
 		menu.save.addActionListener(new ActionListener(){
 			String output;
@@ -864,7 +911,6 @@ public class Total extends JPanel {
 
 
 		});
-
 
 		menu.openanswerp.addActionListener(new ActionListener(){
 
@@ -1236,10 +1282,8 @@ public class Total extends JPanel {
 		});
 
 		menu.edit.addMouseMotionListener(new MouseAdapter(){
-
 			@Override
 			public void mouseMoved(MouseEvent e){
-
 				menu.undo.setEnabled(plain.canUndo());
 				menu.redo.setEnabled(plain.canRedo());
 			}
@@ -1270,7 +1314,18 @@ public class Total extends JPanel {
 		});
 
 	}
+	private void changeTreeFont(Font font){
 
+		String style=font.getFontName();
+		int size=font.getSize();
+
+		//set preference's SystemFontSize and FontStyle
+		pp.setInt("TreeSize", size);
+		pp.setString("TreeFontStyle", style);
+
+		//change the font size of the display
+		updateTreeFonts();
+	}
 	private void changeSystemFont(Font font){
 
 		String style=font.getFontName();
@@ -1340,7 +1395,7 @@ public class Total extends JPanel {
 		int ySize = ((int) tk.getScreenSize().getHeight());
 		frame.setPreferredSize(new Dimension(xSize, ySize));
 		frame.add(total, BorderLayout.CENTER);
-
+		frame.setJMenuBar(menu);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setLocationRelativeTo(null);
@@ -1359,7 +1414,16 @@ public class Total extends JPanel {
 		});
 
 	}
+	private void updateTreeFonts(){
+		Font font = new Font(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize"));
 
+		for(Component c : plain.drawroom.canvas.getComponents()){
+			NodeLabel x = (NodeLabel) c;
+			x.label.setFont(font);
+			x.setSize(x.label.getPreferredSize());
+		}
+		treeMode.drawingPanel.adjust();
+	}
 	public static void main(String[] args) {
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("SystemFontSize")));
 		java.awt.EventQueue.invokeLater(new Runnable() {
@@ -1367,8 +1431,6 @@ public class Total extends JPanel {
 			public void run() {
 				final Total t=new Total();
 				t.createAndShowUI();
-
-
 			}
 		});
 	}
