@@ -186,23 +186,6 @@ public class LMenuBar extends JMenuBar {
 			}
 		});
 
-		demo.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new Demo();
-			}
-
-		});
-
-		hints.addActionListener(new ActionListener(){
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new Hints();
-			}
-
-		});
 
 		manual.addActionListener(new ActionListener(){
 

@@ -44,10 +44,7 @@ import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
 import program.grammar.Grammar;
-import program.mainUI.FontChooserComboBox;
-import program.mainUI.Interface;
-import program.mainUI.LMenuBar;
-import program.mainUI.StrongAES;
+import program.mainUI.*;
 import program.mainUI.drawingPanel.NodeLabel;
 import program.mainUI.drawingPanel.Plain;
 import program.mainUI.inforTree.SentenceSetStorage;
@@ -556,6 +553,29 @@ public class Total extends JPanel {
 			}
 		});
 
+		menu.demo.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Set the font back to the system font for these system windows, then put it back to tree font
+				setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("FontSize")));
+				new Demo();
+				setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
+			}
+
+		});
+
+		menu.hints.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Set the font back to the system font for these system windows, then put it back to tree font
+				setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("FontSize")));
+				new Hints();
+				setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
+			}
+
+		});
 		menu.saveanswer.addActionListener(new ActionListener() {
 
 			public void saveMap2() {

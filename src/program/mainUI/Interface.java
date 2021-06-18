@@ -792,9 +792,10 @@ public class Interface extends JPanel {
 
 				// if x is like "N apple"
 				if (x.contains(" ")) {
-					NodeLabel now = new NodeLabel(x.split(" ")[0], drawingPanel);
+					String[] split = x.split(" ");
+					NodeLabel now = new NodeLabel(split[0], drawingPanel);
 					now.setSize(now.getPreferredSize());
-					NodeLabel nowchild = new NodeLabel(x.split(" ")[1], drawingPanel);
+					NodeLabel nowchild = new NodeLabel(split[1], drawingPanel);
 					nowchild.setSize(nowchild.getPreferredSize());
 					nowchild.type = 1;
 					now.children.add(nowchild);
