@@ -2902,7 +2902,7 @@ public class Plain extends JLayeredPane {
 				else {
 					//// to look at the color issue
 					//// also for the little drag bug
-					dragLabel.browntwinkle();
+					dragLabel.brownTwinkle();
 					doublenode.add(dragLabel);
 				}
 				drawroom.repaint();

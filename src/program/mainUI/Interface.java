@@ -473,7 +473,7 @@ public class Interface extends JPanel {
 					}
 				}
 				nownode.correct=-1;
-				if(ee==1){
+			if(ee==1){
 					drawingPanel.dialogue.setText("Incorrect! Not legal structure by the rules.");
 				}else{
 				drawingPanel.dialogue.setText("Incorrect!This is a legal structure, but it doesn't have a right meaning.");

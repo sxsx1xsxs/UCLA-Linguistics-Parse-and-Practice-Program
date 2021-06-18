@@ -27,8 +27,6 @@ import javax.swing.SwingConstants;
 import javax.swing.Timer;
 import javax.swing.border.LineBorder;
 
-import program.mainUI.Int;
-
 
 public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializable{
 		// the main visible label
@@ -481,24 +479,15 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			}
 			return false;
 		}
-		void browntwinkle() {
+		void brownTwinkle() {
 			Font font = label.getFont();
 			Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
 			setFont(boldFont);
 			setSize(super.getPreferredSize());
-			final Int i = new Int();
-			timer = new Timer(200, new ActionListener() {
+			timer = new Timer(400, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					i.number++;
-
-					if ((i.number % 3) == 0 || (i.number % 3) == 2) {
-						setVisible(true);
-
-					} else {
-						setVisible(false);
-					}
-
+					setVisible(!isVisible());
 					repaint();
 				}
 			});
@@ -511,8 +500,13 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 		}
 
 		void stop() {
-
-			final Int i = new Int();
+			class IntSingleton {
+				/* This replaces the Int class, and serves as a temporary way to hold a global var for the timer event
+				   I would prefer to not do this, but I'm a little concerned about how much code relies on being able
+				   to stop this timer. As a result, I compromised.*/
+				public int number = 0;
+			}
+			final IntSingleton i = new IntSingleton();
 			timer.stop();
 			timer = new Timer(200, new ActionListener() {
 				@Override
