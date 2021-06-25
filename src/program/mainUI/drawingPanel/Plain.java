@@ -415,7 +415,6 @@ public class Plain extends JLayeredPane {
 		int height = (int) (heightIndex * temp.label.getPreferredSize().getHeight());
 		int heightdraw = (int) (bounds.height -height-temp.getPreferredSize().getHeight())+zeroP.y;
 		int i = 40+zeroP.x;
-
 		for (String y : s.split(" ")) {
 			//the same code is copied into setLocation in SentenceSetStorage, please 
 			//remember to modify both of them
@@ -1192,7 +1191,7 @@ public class Plain extends JLayeredPane {
 		}
 
 		// in MouseReleased, this called before dragLabel is added into list
-		// so for the head, do it sepereately
+		// so for the head, do it separately
 		head.setLocation(head.location);
 
 		for (NodeLabel xu : list) {
@@ -1219,31 +1218,24 @@ public class Plain extends JLayeredPane {
 				words.add(x);
 			}
 		}
-
-
 		//first adjust basic nodes' position
 		Collections.sort(words);
 		Collections.reverse(words);
-		double offset = 0; // The width of one space
-		if(!words.isEmpty()){ //If this is empty, it doesn't matter what offset is
-			JLabel space = new JLabel(" ");
-			space.setFont(words.get(0).label.getFont());
-			offset = space.getPreferredSize().getWidth();
-		}
-		Rectangle bounds = drawroom.getViewport().getViewRect();
-		Point zeroP= drawroom.getViewport().getViewPosition();
-		int heightdraw = (int) (bounds.height * 0.9)+zeroP.y;
-		int i = 40+zeroP.x;
+		Point zeroP= new Point(0,0); //default value, never used but we need to guarantee that this has a value if words is empty
+		//we don't actually want to move the text around, so we set up our initial values to be at the first zero
+		System.out.println(zeroP);
+		if(!words.isEmpty())
+			zeroP = words.get(0).getLocation();
+		System.out.println(zeroP);
+		int heightdraw = zeroP.y;
+		int i = zeroP.x;
 
 		for (NodeLabel y : words) {
 			//the same code is copied into setLocation in SentenceSetStorage, please 
 			//remember to modify both of them
-
-
 			y.setLocation(i,heightdraw);
 			y.location = y.getLocation();
-			i = (int) (i +  y.label.getPreferredSize().getWidth() + offset);
-
+			i = (int) (i +  y.label.getPreferredSize().getWidth() + widthIndex*y.label.getPreferredSize().getHeight());
 		}
 
 

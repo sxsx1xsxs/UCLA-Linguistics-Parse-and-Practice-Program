@@ -81,8 +81,8 @@ public class Total extends JPanel {
 		treeMode.practiceMode();
 		menu.studentmode();
 
-		treeMode.teacherMode();
-		menu.teachermode();
+		//treeMode.teacherMode();
+		//menu.teachermode();
 
 		menu.topdown.setEnabled(false);
 		menu.bottomup.setEnabled(false);
