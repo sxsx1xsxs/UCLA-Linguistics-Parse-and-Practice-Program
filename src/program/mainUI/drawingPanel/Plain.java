@@ -357,8 +357,9 @@ public class Plain extends JLayeredPane {
 		} catch (Exception e) {
 			return r;
 		}
-		;
-
+		if(mediate==null){
+			return null;
+		}
 		int i = 0;
 		while (i == 0) {
 			Point mediateLocation = mediate.getLocation();
@@ -1315,6 +1316,7 @@ public class Plain extends JLayeredPane {
 		}
 		for (NodeLabel x : pp) {
 			removelines(dragLabel, x);
+			x.update(); // island propagation
 		}
 
 		// remove all children lines of dragLabel with children
@@ -1324,6 +1326,7 @@ public class Plain extends JLayeredPane {
 		}
 		for (NodeLabel x : cc) {
 			removelines(dragLabel, x);
+			x.update(); // island propagation
 		}
 
 		// those lines without double nodes are still there
@@ -1386,6 +1389,9 @@ public class Plain extends JLayeredPane {
 				}
 			}
 		}
+		// Propagate island changes
+		x.update();
+		y.update();
 		return r;
 	}
 
@@ -1423,6 +1429,9 @@ public class Plain extends JLayeredPane {
 			y.parents.add(x);
 			x.children.add(y);
 		}
+		// Propagate island changes
+		x.update();
+		y.update();
 		return r;
 	}
 
@@ -2222,26 +2231,7 @@ public class Plain extends JLayeredPane {
 			super.paint(g);
 
 			for (Line xy : linelist) {
-				// black plain form
-				if (xy.color == 0) {
-					g2.setStroke(new BasicStroke(1));
-					g.setColor(Color.black);
-				}
-				// orange bold ready form
-				else if (xy.color == 3) {
-					g2.setStroke(new BasicStroke(3));
-					g.setColor(Color.decode("0x994C00"));
-				} else if (xy.color == 6) {
-					g2.setStroke(new BasicStroke(3));
-					g.setColor(Color.decode("0xFF66FF"));
-				}
-				// blue bold chosen form
-				else {
-					g2.setStroke(new BasicStroke(2));
-					g.setColor(Color.blue);
-				}
-				g.drawLine(xy.start.x, xy.start.y ,
-						xy.end.x , xy.end.y );
+				xy.paintSelf(g2);
 			}
 		}
 	}
@@ -2268,6 +2258,8 @@ public class Plain extends JLayeredPane {
 
 			// find addin line
 			findaddinline(dl);
+
+			dl.update(); // island propagation
 
 		}
 
@@ -2414,7 +2406,12 @@ public class Plain extends JLayeredPane {
 				// set the border of nodes on grammar panel to be lowered
 				labeler.setBorder(new BevelBorder(BevelBorder.LOWERED));
 				// create a new NodeLabel using the text from labeler
-				dragLabel = new NodeLabel(labeler.getText(), plain);
+				String labelText = labeler.getText();
+				if(!labelText.equals("Island")) {
+					dragLabel = new NodeLabel(labelText, plain);
+				} else {
+					dragLabel = new Island(plain);
+				}
 				dragLabel.setSize(dragLabel.getPreferredSize());
 				// having the half width and half height ready for later moving
 				// or dragging

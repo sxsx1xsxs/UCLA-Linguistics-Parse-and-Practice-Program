@@ -824,8 +824,6 @@ public class Total extends JPanel {
 
 
 			public void action(){
-
-
 				JFrame f=new JFrame();
 				final JDialog loading = new JDialog(f);
 				JPanel p1 = new JPanel();

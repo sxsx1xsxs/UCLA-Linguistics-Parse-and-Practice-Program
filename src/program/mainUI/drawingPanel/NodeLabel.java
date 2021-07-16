@@ -227,7 +227,15 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 
 		}
 		
-		
+		public void update(){
+			// used to trigger island resizes on being dragged
+			// call after position update or resize
+			for(NodeLabel parent : parents){
+				if(!children.contains(parent) && parent!=this) {
+					parent.update();
+				}
+			}
+		}
 		
 		public void attachTo(Plain p){
 			plain=p;
@@ -536,7 +544,42 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			setFont(font);
 		}
 
-		public class ML extends MouseAdapter {
+		public Point upperLeftCorner(){
+			// returns the upper left corner of a theoretical island around the node and its children
+			int x = getX();
+			int y = getY();
+			if(children.isEmpty()){
+				System.out.println("-----------left");
+			}
+			if(!getParent().equals(plain.drawroom.canvas)){
+				x=location.x;
+				y=location.y;
+			}
+			System.out.println("x:" + x + " y:" + y);
+			for(NodeLabel child : children){
+				Point loc = child.upperLeftCorner();
+				if(loc.x < x){x = loc.x;}
+				if(loc.y < y){y = loc.y;}
+			}
+			return new Point(x,y);
+		}
+		public Point lowerRightCorner(){
+			// returns the lower right corner of a theoretical island around the node and its children
+			int x = getX() + getWidth();
+			int y = getY() + getHeight();
+			if(!getParent().equals(plain.drawroom.canvas)){
+				x=location.x + getWidth();
+				y=location.y + getHeight();
+			}
+			for(NodeLabel child : children){
+				Point loc = child.lowerRightCorner();
+				if(loc.x > x){x = loc.x;}
+				if(loc.y > y){y = loc.y;}
+			}
+			return new Point(x,y);
+		}
+
+	public class ML extends MouseAdapter {
 
 			@Override
 			public void mouseExited(MouseEvent me) {

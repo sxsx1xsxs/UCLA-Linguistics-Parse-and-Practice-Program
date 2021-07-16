@@ -1,6 +1,6 @@
 package program.mainUI.drawingPanel;
 
-import java.awt.Point;
+import java.awt.*;
 
 
 public class Line {
@@ -33,7 +33,30 @@ public class Line {
 		plain=p;
 	}
 	
-	
+
+	public void paintSelf(Graphics2D g){
+		// black plain form
+		if (color == 0) {
+			g.setStroke(new BasicStroke(1));
+			g.setColor(Color.black);
+		}
+		// orange bold ready form
+		else if (color == 3) {
+			g.setStroke(new BasicStroke(3));
+			g.setColor(Color.decode("0x994C00"));
+		} else if (color == 6) {
+			g.setStroke(new BasicStroke(3));
+			g.setColor(Color.decode("0xFF66FF"));
+		}
+		// blue bold chosen form
+		else {
+			g.setStroke(new BasicStroke(2));
+			g.setColor(Color.blue);
+		}
+		g.drawLine(start.x, start.y ,
+				end.x , end.y );
+	}
+
 	public void addparent(NodeLabel ha) {
 		parent = ha;
 		ha.childrenlines.addElement(Line.this);

@@ -82,6 +82,7 @@ public class SingleColumnPanel extends JScrollPane {
 			set.add(x);
 		}
 		Collections.sort(set);
+		set.add(0,"Island");
 		for(String x:set){
 			LLabel now = new LLabel(x,grammar);
 			back.add(now, c);
