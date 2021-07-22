@@ -598,6 +598,7 @@ public class Plain extends JLayeredPane {
 
 	// used in mousereleased to add lines
 	// dragLabel is already drawroom zuobiao
+	// Alex's best translation of above: drag label is already in drawroom and using its coordinates
 	private void orangeLines(NodeLabel dragLabel) {
 		Vector<NodeLabel> heads = new Vector<NodeLabel>();
 		for (NodeLabel x : list) {
@@ -1430,8 +1431,7 @@ public class Plain extends JLayeredPane {
 			x.children.add(y);
 		}
 		// Propagate island changes
-		x.update();
-		y.update();
+        x.update();
 		return r;
 	}
 
@@ -1546,6 +1546,17 @@ public class Plain extends JLayeredPane {
 	//return the error message if there is something wrong
 	public static String obeyRules(NodeLabel head, Vector<NodeLabel> jiji, Grammar grammar) {
 		String headt=head.label.getText();
+
+		//if it's an island node
+		// side note: what's jiji in this context? I was always taught to say 孩子 for children
+		if(head.grammarType == 1 ){
+			if(jiji.size()==1){
+				return null;
+			} else {
+				return "Warning: island nodes must have exactly 1 daughter";
+			}
+		}
+
 		//if it's words nodes
 		if(head.type==1){
 			if(jiji.size()>0){
@@ -2721,7 +2732,7 @@ public class Plain extends JLayeredPane {
 				// used in adding nodes
 				updatePC(dragLabel);
 			}
-
+			dragLabel.update();
 			// it's necessary here;
 			repaint();
 		}
@@ -2876,6 +2887,7 @@ public class Plain extends JLayeredPane {
 				if (clicked != 4) {
 					labeler.setBorder(new BevelBorder(BevelBorder.RAISED));
 				}
+				dragLabel.update();
 
 			}
 

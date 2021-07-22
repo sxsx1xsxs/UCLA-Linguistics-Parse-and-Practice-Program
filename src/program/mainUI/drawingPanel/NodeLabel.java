@@ -63,12 +63,15 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 		// color=5, 4C9900, dark green, FOR DOUBLENODES double clicks
 
 		// right-click popup menu for nodes
-		transient private JPopupMenu right_click_menu;
+		transient public JPopupMenu right_click_menu;
 
 		 
 		// type recording whether the node is a word in the sentence or a tree node {terminal or non-terminal}
 		//when==1 it is a word
 		public int type = 0;
+		// Similar in principle, used to work on reserved nodes like islands
+		// 1 = island
+		public int grammarType = 0;
 
 		// modified after calling the function bracketForm()
 		// start from 1;
@@ -491,7 +494,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			Font font = label.getFont();
 			Font boldFont = new Font(font.getFontName(), Font.BOLD, font.getSize());
 			setFont(boldFont);
-			setSize(super.getPreferredSize());
+			//setSize(super.getPreferredSize());
 			timer = new Timer(400, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
@@ -548,14 +551,10 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			// returns the upper left corner of a theoretical island around the node and its children
 			int x = getX();
 			int y = getY();
-			if(children.isEmpty()){
-				System.out.println("-----------left");
-			}
 			if(!getParent().equals(plain.drawroom.canvas)){
 				x=location.x;
 				y=location.y;
 			}
-			System.out.println("x:" + x + " y:" + y);
 			for(NodeLabel child : children){
 				Point loc = child.upperLeftCorner();
 				if(loc.x < x){x = loc.x;}
@@ -614,7 +613,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			{
 				label.setForeground(Color.blue);
 				label.setBorder(new LineBorder(Color.black, 2));
-				label.setSize(getPreferredSize());			
+				//label.setSize(getPreferredSize());
 				//plain.drawroom.repaint();
 				plain.info.setText("Node "+ label.getText() + " is ready to be dragged or chosen");
 				plain.info.revalidate();
