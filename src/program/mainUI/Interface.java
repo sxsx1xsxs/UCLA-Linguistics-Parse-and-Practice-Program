@@ -11,17 +11,12 @@ import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
 import java.util.Collections;
 import java.util.Stack;
 import java.util.Vector;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JTextField;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
 import javax.swing.tree.DefaultMutableTreeNode;
 
@@ -326,7 +321,7 @@ public class Interface extends JPanel {
 		 * the label denoting mode can be "Teacher Mode" or "Practice Mode"
 		 */
 		JLabel tlabel = new JLabel("Teacher Mode");
-
+		JCheckBox arrowMode = new JCheckBox("Draw Arrows");
 		// the right side
 		// for edit mode
 		JButton start = new JButton("Start");
@@ -369,7 +364,7 @@ public class Interface extends JPanel {
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
-			add(check, c);
+			add(check,c);
 
 			c.gridx = 4;
 			c.gridy = 0;
@@ -380,32 +375,38 @@ public class Interface extends JPanel {
 			c.gridx = 5;
 			c.gridy = 0;
 			c.gridwidth = 1;
-			c.weightx = 1;
-			c.fill = GridBagConstraints.NONE;
-			add(tlabel, c);
+			c.weightx = 0;
+			add(arrowMode, c);
 
 			c.gridx = 6;
 			c.gridy = 0;
 			c.gridwidth = 1;
-			c.weightx = 0;
-			c.fill = GridBagConstraints.BOTH;
-			add(start, c);
+			c.weightx = 1;
+			c.fill = GridBagConstraints.NONE;
+			add(tlabel, c);
 
 			c.gridx = 7;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
 			c.fill = GridBagConstraints.BOTH;
-			add(sl, c);
+			add(start, c);
 
 			c.gridx = 8;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
 			c.fill = GridBagConstraints.BOTH;
-			add(clean, c);
+			add(sl, c);
 
 			c.gridx = 9;
+			c.gridy = 0;
+			c.gridwidth = 1;
+			c.weightx = 0;
+			c.fill = GridBagConstraints.BOTH;
+			add(clean, c);
+
+			c.gridx = 10;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
@@ -551,6 +552,10 @@ public class Interface extends JPanel {
 					repaint();
 				}
 
+			});
+
+			arrowMode.addItemListener((ItemEvent e) -> {
+				drawingPanel.arrowMode = e.getStateChange()==ItemEvent.SELECTED;
 			});
 			
 			next.addActionListener(new ActionListener(){

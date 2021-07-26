@@ -58,6 +58,7 @@ public class Plain extends JLayeredPane {
 	public int locationh;
 	//record whether the plain is enabled
 	int enabled=1;
+	public boolean arrowMode = false; // controls whether we use arrows or not
 	MouseAdapter sgMouseAdapter ;
 	MouseAdapter dialogueMouseAdapter;
 	MouseAdapter drMouseAdapter ;
@@ -1395,7 +1396,13 @@ public class Plain extends JLayeredPane {
 		y.update();
 		return r;
 	}
-
+	public Arrow addArrow(NodeLabel x, NodeLabel y){
+		Arrow arrow = new Arrow();
+		arrow.parent = x;
+		arrow.children = y;
+		linelist.add(arrow);
+		return arrow;
+	}
 	// helper function of updatePC
 	public Line addlines(NodeLabel x, NodeLabel y) {
 		int widthy = y.getWidth() / 2;
@@ -2102,7 +2109,11 @@ public class Plain extends JLayeredPane {
 			}
 			// otherwise add a new line
 			else {
-				addlines(doublenode.elementAt(0), doublenode.elementAt(1));
+				if(arrowMode){ // if we're in arrow mode, we actually need to add an arrow!
+					addArrow(doublenode.elementAt(0),doublenode.elementAt(1));
+				} else {
+					addlines(doublenode.elementAt(0), doublenode.elementAt(1));
+				}
 				UndoableEdit undoableEdit = new LUndoEdit(doublenode.elementAt(0), doublenode.elementAt(1))
 				{
 
