@@ -861,61 +861,26 @@ public class Plain extends JLayeredPane {
 	}
 
 	static boolean inRange(Line line, Point p) {
-		int mx = line.start.x;
-		int my = line.start.y;
-		int nx = line.end.x;
-		int ny = line.end.y;
+		// decides if a point p is in range of a line by projection
+		int startX = line.start.x;
+		int startY = line.start.y;
+		int endX = line.end.x;
+		int endY = line.end.y;
 		int px = p.x;
 		int py = p.y;
-		double length = Math.sqrt((mx - nx) * (mx - nx) + (my - ny) * (my - ny));
-		double rangeLength = length / 5;
-
-		if (mx == nx) {
-			if (px - mx > -5 && px - mx < 5) {
-				if (my > ny) {
-					if (py <= my - rangeLength && py >= ny + rangeLength) {
-						return true;
-					} else {
-						if (py <= ny - rangeLength && py >= my + rangeLength) {
-							return true;
-						}
-					}
-				}
-			}
-		} else if (my == ny) {
-
-			if (mx > nx) {
-				if (px <= mx - rangeLength && px >= nx + rangeLength) {
-					return true;
-				} else {
-					if (px <= nx - rangeLength && px >= mx + rangeLength) {
-						return true;
-					}
-				}
-			}
-
-		} else {
-			double t = (double) (my - ny) / (mx - nx);
-			double ct = my - t * mx;
-			double tangent = (double) (-1) / (my - ny) * (mx - nx);
-			double c = py - tangent * px;
-			double x = (c - ct) / (t - tangent);
-			double y = x * tangent + c;
-			if (((x - px) * (x - px) + (y - py) * (y - py) < 25)) {
-				double xx = rangeLength / Math.sqrt(1 + t * t);
-				if (mx < nx) {
-					if (x < nx - xx && x > mx + xx) {
-						return true;
-					}
-				} else {
-					if (x > nx + xx && x < mx - xx) {
-						return true;
-					}
-				}
-			}
-
+		double length = Math.sqrt((startX - endX) * (startX - endX) + (startY - endY) * (startY - endY));
+		// Create a projection of point p onto the line, centered on start
+		// Perp is the perpindicular coordinate, par is the parallel point to the line projection
+		// to do this we need to make a vector, we do so below.
+		int vecX = endX - startX;
+		int vecY = endY - startY;
+		double par = ((double)(px - startX)*vecX + (py-startY)*vecY)/length;
+		if(par > 0 && par < length){// if the points projection is on the line
+			double pointLengthSquared = (px - startX) * (px - startX) + (py - startY) * (py - startY);
+			// since we only care about the magnitude of the perpindicular line, we calculate the square by pythagorean theorem
+			double perpSquare = pointLengthSquared - par*par;
+			return perpSquare <= 25;
 		}
-
 		return false;
 	}
 
@@ -1286,25 +1251,46 @@ public class Plain extends JLayeredPane {
 
 	}
 
+	public int lowestPointBetweenTwoX(int lowX, int highX){
+		// returns y coord of lowest nodelabel between two xs
+		int minY = 0;
+		for(NodeLabel node : list){
+			if(node.location.x < lowX || node.location.x > highX){
+				continue;
+			}
+			int candidateY = node.location.y + node.getHeight();
+			if(candidateY > minY){
+				minY = candidateY;
+			}
+		}
+		if(dragLabel != null && dragLabel.location.x >= lowX && dragLabel.location.x <= highX){
+			int candidateY = dragLabel.location.y + dragLabel.getHeight();
+			if(candidateY > minY){
+				minY = candidateY;
+			}
+		}
+		return minY;
+	}
+
 	// used in MouseReleased when dragging line to delete
 	// used in popup menu for lines when deleting the lines
 	// used in key board deleting line function
 	public void removeline(Line x) {
-		// if both ends have nodes attached to
-		if (x.parent != null && x.children != null) {
-			removelines(x.parent, x.children);
-		}
-
-		// if at least one end is not attached to anything
-		else {
-			linelist.remove(x);
-			if (x.parent != null) {
-				x.parent.childrenlines.remove(x);
-			} else if (x.children != null) {
-				x.children.parentlines.remove(x);
+		// Alex: Originally used removeLines, but I think this is cleaner may lead to problems down the road.
+		linelist.remove(x);
+		if (x.parent != null) {
+			x.parent.childrenlines.remove(x);
+			if(x.children!=null){
+				x.parent.children.remove(x.children);
 			}
 		}
-
+		if (x.children != null) {
+			x.children.parentlines.remove(x);
+			if(x.parent!=null){
+				x.children.parents.remove(x.parent);
+			}
+		}
+		repaint();
 	}
 
 	// used in MouseReleased
@@ -1400,6 +1386,7 @@ public class Plain extends JLayeredPane {
 		Arrow arrow = new Arrow();
 		arrow.parent = x;
 		arrow.children = y;
+		arrow.plain = this;
 		linelist.add(arrow);
 		return arrow;
 	}
@@ -2743,7 +2730,9 @@ public class Plain extends JLayeredPane {
 				// used in adding nodes
 				updatePC(dragLabel);
 			}
-			dragLabel.update();
+			if(dragLabel!=null){
+				dragLabel.update();
+			}
 			// it's necessary here;
 			repaint();
 		}
