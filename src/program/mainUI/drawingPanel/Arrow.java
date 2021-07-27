@@ -67,8 +67,8 @@ public class Arrow extends Line{
             }
             childrenY = children.location.y + children.getHeight()/2;
         }
-        int lowX = parent.location.x < children.location.x ? parent.location.x : children.location.x;
-        int highX = parent.location.x > children.location.x ? parent.location.x : children.location.x;
+        int lowX = parent.location.x < children.location.x ? parent.upperLeftCorner().x : children.upperLeftCorner().x;
+        int highX = parent.location.x > children.location.x ? parent.lowerRightCorner().x : children.lowerRightCorner().x;
         int minY = plain.lowestPointBetweenTwoX(lowX,highX);
         final int radius = 3;
         Path2D.Float path = new Path2D.Float();
