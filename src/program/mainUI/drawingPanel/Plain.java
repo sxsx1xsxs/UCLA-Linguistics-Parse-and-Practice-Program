@@ -222,12 +222,26 @@ public class Plain extends JLayeredPane {
 		Vector<NodeLabel> r = new Vector<NodeLabel>();
 		// first get a whole copy list with the same index
 		for (NodeLabel x : list) {
-			NodeLabel now = new NodeLabel(x.label.getText(),plain);
+			NodeLabel now = x.makeBasicCopy(plain);
 			now.location = new Point(x.location.x, x.location.y);
 			now.setLocation(now.location);
 			now.color = x.color;
 			now.type = x.type;
 			now.grammar_error = x.grammar_error;
+			now.childrenArrows.addAll(x.childrenArrows);
+			for(Line l : now.childrenArrows){
+				l.parent=now;
+			}
+			now.parentArrows.addAll(x.parentArrows);
+			for(Line l : now.parentArrows){
+				l.children=now;
+			}
+			for(Line l: x.childrenlines){
+				l.parent = now;
+			}
+			for(Line l: x.parentlines){
+				l.children = now;
+			}
 			r.add(now);
 		}
 		for (int i = 0; i < list.size(); i++) {
@@ -270,23 +284,14 @@ public class Plain extends JLayeredPane {
 		Vector<Line> r = new Vector<Line>();
 
 		for (Line x : linelist) {
-			Line copy = new Line(plain);
+			Line copy = x.makeCopy(plain);
 			// Point can be copied directly, because everytime the point change,
 			// it is constructing a new point instead of modifying the point
 			copy.start = x.start;
 			copy.end = x.end;
 			copy.color = x.color;
-			NodeLabel parent = x.parent;
-			if (parent != null) {
-				int index = list.indexOf(parent);
-				copy.parent = copyNode.elementAt(index);
-			}
-			NodeLabel children = x.children;
-			if (children != null) {
-				int index = list.indexOf(children);
-				copy.children = copyNode.elementAt(index);
-			}
-
+			copy.parent = x.parent;
+			copy.children = x.children;
 			r.add(copy);
 		}
 
@@ -403,6 +408,9 @@ public class Plain extends JLayeredPane {
 			drawroom.canvas.add(x);
 			drawroom.revalidate();
 			drawroom.repaint();
+		}
+		for(NodeLabel x : list){
+			x.update();
 		}
 		repaint();
 	}
@@ -842,12 +850,17 @@ public class Plain extends JLayeredPane {
 		for (NodeLabel x : others) {
 			removelines(dlabel, x);
 		}
+		for(Line x : dlabel.parentArrows){
+			removeline(x);
+		}
+		for(Line x : dlabel.childrenArrows){
+			removeline(x);
+		}
 		list.remove(dlabel);
 		Vector<Line> ll = new Vector<Line>();
 		for (Line x : linelist) {
 			if (x.parent == dlabel || x.children == dlabel) {
 				ll.add(x);
-
 			}
 		}
 
@@ -1280,12 +1293,14 @@ public class Plain extends JLayeredPane {
 		linelist.remove(x);
 		if (x.parent != null) {
 			x.parent.childrenlines.remove(x);
+			x.parent.childrenArrows.remove(x);
 			if(x.children!=null){
 				x.parent.children.remove(x.children);
 			}
 		}
 		if (x.children != null) {
 			x.children.parentlines.remove(x);
+			x.children.parentArrows.remove(x);
 			if(x.parent!=null){
 				x.children.parents.remove(x.parent);
 			}
@@ -1387,6 +1402,8 @@ public class Plain extends JLayeredPane {
 		arrow.parent = x;
 		arrow.children = y;
 		arrow.plain = this;
+		x.childrenArrows.add(arrow);
+		y.parentArrows.add(arrow);
 		linelist.add(arrow);
 		return arrow;
 	}

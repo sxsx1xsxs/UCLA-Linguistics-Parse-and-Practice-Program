@@ -43,7 +43,6 @@ public class Island extends NodeLabel{
         int count = plain.drawroom.canvas.getComponentCount();
         plain.drawroom.canvas.setComponentZOrder(this,count-1);
         location = getLocation();
-        System.out.println(label.getText() + " " + parents.size());
     }
     @Override
     public Point upperLeftCorner(){
@@ -87,5 +86,13 @@ public class Island extends NodeLabel{
     public void update(){
         resize();
         super.update();
+    }
+    @Override
+    public String getLabelName(){
+        return "__Island"; //return a reserved name for the bracket form so we know to create an island!
+    }
+    @Override
+    public NodeLabel makeBasicCopy(Plain p){
+        return new Island(p);
     }
 }

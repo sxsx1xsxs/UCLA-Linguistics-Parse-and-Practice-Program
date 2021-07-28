@@ -136,5 +136,7 @@ public class Line {
 			}
 		}
 	}
-
+	public Line makeCopy(Plain p){
+		return new Line(p);
+	}
 }

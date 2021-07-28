@@ -53,8 +53,10 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 
 		public Vector<Line> parentlines = new Vector<Line>();
 		public Vector<Line> childrenlines = new Vector<Line>();
+		public Vector<Line> parentArrows = new Vector<Line>();
+		public Vector<Line> childrenArrows = new Vector<Line>();
 
-		int color = 0;
+	int color = 0;
 		// color=1, blue, when chosen or mouse hovering
 		// color=3, 994C00 orange for ready nodes to be paired up-however, never
 		// set to 3 because this
@@ -334,7 +336,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 
 					plain.drawroom.canvas.remove(NodeLabel.this);
 					plain.list.remove(NodeLabel.this);
-
+					plain.removeNode(NodeLabel.this);
 					plain.drawroom.repaint();
 					// repaint();
 
@@ -392,7 +394,13 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			});
 			// menu.add(changeto);
 		}
-		
+		public NodeLabel makeBasicCopy(Plain p){
+			return new NodeLabel(getLabelName(),p);
+		}
+		// get the name used in the bracket form used to store things
+		public String getLabelName(){
+			return label.getText();
+		}
 		//helpfer function of crossingLine
 		//given a nodeLabel and a line,
 		//return true if the two ends of line are both outside of the dragLabel's label border

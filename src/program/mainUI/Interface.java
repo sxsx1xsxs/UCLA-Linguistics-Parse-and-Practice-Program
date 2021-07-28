@@ -12,9 +12,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.util.Collections;
-import java.util.Stack;
-import java.util.Vector;
+import java.util.*;
 
 import javax.swing.*;
 import javax.swing.plaf.basic.BasicSplitPaneUI;
@@ -22,9 +20,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import program.Preference;
 import program.grammar.Grammar;
-import program.mainUI.drawingPanel.Line;
-import program.mainUI.drawingPanel.NodeLabel;
-import program.mainUI.drawingPanel.Plain;
+import program.mainUI.drawingPanel.*;
 import program.mainUI.inforTree.IndexNode;
 import program.mainUI.inforTree.SentenceTree;
 
@@ -610,6 +606,7 @@ public class Interface extends JPanel {
 	public class Tree {
 		public Vector<NodeLabel> list = new Vector<NodeLabel>();
 		public Vector<Line> linelist = new Vector<Line>();
+		public Vector<Line> arrowList = new Vector<>();
 		public String sentence = "";
 		public String meaning = "";
 		Vector<String> structureError;
@@ -698,6 +695,8 @@ public class Interface extends JPanel {
 				else					
 				return "none";
 			}
+			HashMap<Arrow,Integer> arrowsToIDs = new HashMap<>();
+			// Add in all arrows to the arrowmap
 			Stack<NodeLabel> process1 = new Stack<NodeLabel>();
 			Stack<NodeLabel> process2 = new Stack<NodeLabel>();
 			NodeLabel root = new NodeLabel("", drawingPanel);
@@ -726,9 +725,9 @@ public class Interface extends JPanel {
 			while (process2.size() > 0) {
 				NodeLabel now = process2.pop();
 				if (now.children.size() == 0) {
-					now.bracketForm = " " + now.label.getText();
+					now.bracketForm = " " + getBracketFormArrows(now,arrowsToIDs) + now.getLabelName();
 				} else {
-					now.bracketForm = "[" + now.label.getText();
+					now.bracketForm = "[" + getBracketFormArrows(now,arrowsToIDs) +  now.getLabelName();
 					for (NodeLabel x : now.children) {
 						now.bracketForm += x.bracketForm;
 					}
@@ -737,6 +736,37 @@ public class Interface extends JPanel {
 			}
 
 			return root.bracketForm;
+		}
+
+		public String getBracketFormArrows(NodeLabel node, HashMap<Arrow,Integer> map){
+			StringBuffer stringBuffer = new StringBuffer(20);
+			for(Line arrow : node.childrenArrows){
+				Arrow a = (Arrow)arrow;
+				stringBuffer.append('>');
+				Integer id;
+				if(map.containsKey(a)){
+					id = map.get(a);
+				} else {
+					id = map.size();
+					map.put(a,id);
+				}
+				stringBuffer.append(id);
+			}
+
+			for(Line arrow : node.parentArrows){
+				Arrow a = (Arrow)arrow;
+				stringBuffer.append('<');
+				Integer id;
+				if(map.containsKey(a)){
+					id = map.get(a);
+				} else {
+					id = map.size();
+					map.put(a,id);
+				}
+				stringBuffer.append(id);
+			}
+			stringBuffer.append('|');
+			return stringBuffer.toString();
 		}
 
 		public Tree copyTree() {
@@ -786,9 +816,10 @@ public class Interface extends JPanel {
 		// with parent-child relation built
 		// set the size of those NodeLabels to their preferredSize
 		private Vector<NodeLabel> addInNodes(Vector<String> material) {
+			arrowList.clear();
 			teacherPanel.clean.doClick();
 			Stack<NodeLabel> process = new Stack<NodeLabel>();
-
+			HashMap<String,Arrow> idsToArrows = new HashMap<>();
 			// the return list of NodeLabel
 			// with the same order that appears in the bracket form
 			// the first nodeLabel is the root
@@ -798,9 +829,9 @@ public class Interface extends JPanel {
 				// if x is like "N apple"
 				if (x.contains(" ")) {
 					String[] split = x.split(" ");
-					NodeLabel now = new NodeLabel(split[0], drawingPanel);
+					NodeLabel now = NodeLabelFactory.createWithReservedTextAndArrows(split[0], drawingPanel,idsToArrows,arrowList);
 					now.setSize(now.getPreferredSize());
-					NodeLabel nowchild = new NodeLabel(split[1], drawingPanel);
+					NodeLabel nowchild = NodeLabelFactory.createWithReservedTextAndArrows(split[1],drawingPanel,idsToArrows,arrowList);
 					nowchild.setSize(nowchild.getPreferredSize());
 					nowchild.type = 1;
 					now.children.add(nowchild);
@@ -814,7 +845,7 @@ public class Interface extends JPanel {
 				}
 				// if x is like "NP" or "["
 				else if (x != "]") {
-					NodeLabel now = new NodeLabel(x, drawingPanel);
+					NodeLabel now = NodeLabelFactory.createWithReservedTextAndArrows(x, drawingPanel,idsToArrows,arrowList);
 					process.add(now);
 					if (x != "[") {
 						now.setSize(now.getPreferredSize());
@@ -890,6 +921,7 @@ public class Interface extends JPanel {
 		public void addInLines() {
 			// first, clear out the lines and then readd in
 			linelist = new Vector<Line>();
+			linelist.addAll(arrowList);
 			for (NodeLabel y : list) {
 				y.childrenlines = new Vector<Line>();
 				y.parentlines = new Vector<Line>();

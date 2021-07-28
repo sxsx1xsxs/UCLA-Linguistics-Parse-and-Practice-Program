@@ -7,10 +7,21 @@ import java.awt.geom.Path2D;
 import java.awt.geom.Rectangle2D;
 
 public class Arrow extends Line{
+    @Override
+    public Line makeCopy(Plain p){
+        return new Arrow(p);
+    }
+    public Arrow(){
+
+    }
+    public Arrow(Plain p){
+        attachTo(p);
+    }
     static int BOTTOM_PAD=20;
     @Override
     public void paintSelf(Graphics2D g){
         if(parent == null || children == null) {
+            plain.removeline(this);
             return;
         }
         BasicStroke stroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL);
@@ -40,7 +51,7 @@ public class Arrow extends Line{
         // all locations are understood to be at the *bottom middle* of the node
         int parentX;
         int parentY;
-        if(parent.children.isEmpty()){
+        if(parent.children.isEmpty() || parent.grammarType==1){
             //draw from the bottom if we have no children
             parentX = parent.location.x + parent.getWidth()/2;
             parentY = parent.location.y + parent.getHeight();
@@ -55,7 +66,7 @@ public class Arrow extends Line{
         // the same thing again but for the children
         int childrenX;
         int childrenY;
-        if(children.children.isEmpty()){
+        if(children.children.isEmpty() || children.grammarType==1){
             //draw from the bottom if we have no children
             childrenX = children.location.x + children.getWidth()/2;
             childrenY = children.location.y + children.getHeight();
@@ -75,7 +86,7 @@ public class Arrow extends Line{
         path.moveTo(parentX,parentY);
         // determine if we need to draw an extra segment to go out to the right
         int leftSegment;
-        if(parent.children.isEmpty()){
+        if(parent.children.isEmpty() || parent.grammarType==1){
             leftSegment = parentX;
         } else {
             leftSegment = parentX < childrenX ? parent.upperLeftCorner().x : parent.lowerRightCorner().x;
@@ -86,7 +97,7 @@ public class Arrow extends Line{
         end = new Point(leftSegment,minY + BOTTOM_PAD/2);
         path.lineTo(leftSegment,minY + BOTTOM_PAD/2);
         int rightSegment;
-        if(children.children.isEmpty()){
+        if(children.children.isEmpty() || children.grammarType == 1){
             rightSegment = childrenX;
         } else {
             rightSegment = childrenX < parentX ? children.upperLeftCorner().x : children.lowerRightCorner().x;
