@@ -554,8 +554,13 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			Font font = label.getFont();
 			setFont(font);
 		}
-
-		public Point upperLeftCorner(){
+		public Point lowerMid(){
+			return new Point(location.x + getWidth()/2, location.y + getHeight()- label.getLocation().y);
+		}
+		public Point upperMid(){
+			return new Point(location.x + getWidth()/2, location.y + label.getLocation().y);
+		}
+	public Point upperLeftCorner(){
 			// returns the upper left corner of a theoretical island around the node and its children
 			int x = getX();
 			int y = getY();

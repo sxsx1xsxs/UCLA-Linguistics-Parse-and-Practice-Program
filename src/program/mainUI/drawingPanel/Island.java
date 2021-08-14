@@ -19,6 +19,7 @@ public class Island extends NodeLabel{
     }
     private void resize(){
         if(children.isEmpty()){
+            setSize(50,50);
             return;
         }
         // Otherwise, we need to take the lower nodes name for grammar calculations. We just use the first one since
@@ -30,19 +31,47 @@ public class Island extends NodeLabel{
         int height = newRightCorner.y - newLocation.y ;
         setBounds(newLocation.x,newLocation.y ,width,height);
         label.setLocation(0,0);
-        for(Line child : childrenlines){
-            child.end = new Point(newLocation.x + width/2,
-                    newLocation.y);
-        }
-        for(Line parent : parentlines){
-            parent.start = new Point(newLocation.x + width/2,
-                    newLocation.y);
+        if(children.size()==1){
+            // if we have exactly one child, we should try to make it look like the lines go through the island
+            // to the node below it. To do this, we have to make the lines overlap.
+            Point upperMid = upperMid();
+            Point lowerMid = lowerMid();
+            for(Line child : childrenlines){
+                child.end = lowerMid;
+            }
+            for(Line parent : parentlines){
+                parent.start = upperMid;
+            }
+        } else {
+            int pointLocation = newLocation.x + width/2;
+            for(Line child : childrenlines){
+                child.end = new Point(pointLocation,
+                        newLocation.y);
+            }
+            for(Line parent : parentlines){
+                parent.start = new Point(pointLocation,
+                        newLocation.y);
+            }
         }
 
         // Put the island last in the component order, ensuring the nodelabels can always be clicked on
         int count = plain.drawroom.canvas.getComponentCount();
         plain.drawroom.canvas.setComponentZOrder(this,count-1);
         location = getLocation();
+    }
+    @Override
+    public Point lowerMid(){
+        if(parents.isEmpty()){
+            return super.lowerMid();
+        }
+        return parents.get(0).lowerMid();
+    }
+    @Override
+    public Point upperMid(){
+        if(children.isEmpty()){
+            return super.upperMid();
+        }
+        return children.get(0).upperMid();
     }
     @Override
     public Point upperLeftCorner(){

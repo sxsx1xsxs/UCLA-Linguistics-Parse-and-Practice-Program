@@ -2195,7 +2195,7 @@ public class Plain extends JLayeredPane {
 				}
 				;
 			}
-
+			/* draws a line over the old line, I'm deprecating this as the lines already change color, but not deleting it because the professor may prefer the old setup
 			if(dline.size()>0){
 				for (Line xy : dline) {
 
@@ -2206,7 +2206,7 @@ public class Plain extends JLayeredPane {
 							xy.end.x+plain.getLocation(2).x+adjust.x , xy.end.y +plain.getLocation(2).y+adjust.y);
 				}
 			}
-
+			*/
 
 
 			//drawroom.repaint();

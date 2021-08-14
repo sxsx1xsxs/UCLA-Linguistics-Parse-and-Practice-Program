@@ -17,7 +17,7 @@ public class Arrow extends Line{
     public Arrow(Plain p){
         attachTo(p);
     }
-    static int BOTTOM_PAD=20;
+    static int BOTTOM_PAD=30;
     @Override
     public void paintSelf(Graphics2D g){
         if(parent == null || children == null) {
@@ -29,7 +29,7 @@ public class Arrow extends Line{
         // black plain form
         if (color == 0) {
             g.setStroke(new BasicStroke(1.0f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
-            g.setColor(Color.black);
+            g.setColor(Color.blue);
         }
         // orange bold ready form
         else if (color == 3) {
@@ -42,7 +42,7 @@ public class Arrow extends Line{
         // blue bold chosen form
         else {
             g.setStroke(new BasicStroke(2.0f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
-            g.setColor(Color.blue);
+            g.setColor(Color.green);
         }
         // roadmap for the lines we draw
         // 1. a straight line down to our lowest point
@@ -89,9 +89,13 @@ public class Arrow extends Line{
         if(parent.children.isEmpty() || parent.grammarType==1){
             leftSegment = parentX;
         } else {
-            leftSegment = parentX < childrenX ? parent.upperLeftCorner().x : parent.lowerRightCorner().x;
+            leftSegment = parentX < childrenX ? parent.upperLeftCorner().x - BOTTOM_PAD/2: parent.lowerRightCorner().x + BOTTOM_PAD/2;
             int dist = leftSegment-parentX;
-            path.curveTo(parentX + dist/3,parentY - BOTTOM_PAD,parentX + (2*dist)/2,parentY - BOTTOM_PAD/2,leftSegment,parentY);
+            if(dist < 0){
+                path.curveTo(parentX + dist/3,parentY - 3*BOTTOM_PAD/24,parentX + dist,parentY - BOTTOM_PAD/12,leftSegment,parentY);
+            } else {
+                path.curveTo(parentX + dist,parentY - BOTTOM_PAD/12,parentX + dist/3,parentY - 3*BOTTOM_PAD/24,leftSegment,parentY);
+            }
         }
         start = new Point(leftSegment,parentY);
         end = new Point(leftSegment,minY + BOTTOM_PAD/2);
@@ -100,13 +104,17 @@ public class Arrow extends Line{
         if(children.children.isEmpty() || children.grammarType == 1){
             rightSegment = childrenX;
         } else {
-            rightSegment = childrenX < parentX ? children.upperLeftCorner().x : children.lowerRightCorner().x;
+            rightSegment = childrenX < parentX ? children.upperLeftCorner().x - BOTTOM_PAD/2 : children.lowerRightCorner().x + BOTTOM_PAD/2;
         }
         path.quadTo((parentX+rightSegment)/2,minY+BOTTOM_PAD,rightSegment,minY+BOTTOM_PAD/2);
         path.lineTo(rightSegment,childrenY);
         if(rightSegment!=childrenX){
             int dist = rightSegment - childrenX;
-            path.curveTo(childrenX + dist/3,childrenY - BOTTOM_PAD,childrenX + (2*dist)/2,childrenY - BOTTOM_PAD/2,childrenX,childrenY);
+            if(dist < 0){
+                path.curveTo(childrenX + dist/3,childrenY - 3*BOTTOM_PAD/24,childrenX + dist,childrenY - BOTTOM_PAD/12,childrenX,childrenY);
+            } else {
+                path.curveTo(childrenX + dist,childrenY - BOTTOM_PAD/12,childrenX + dist/3,childrenY - 3*BOTTOM_PAD/24,childrenX,childrenY);
+            }
             drawArrowHead(g,new Point(childrenX,childrenY), new Point(rightSegment,childrenY));
         } else {
             drawArrowHead(g,new Point(childrenX,childrenY), new Point(childrenX,minY + BOTTOM_PAD));
