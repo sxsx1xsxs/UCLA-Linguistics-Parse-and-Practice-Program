@@ -2285,8 +2285,8 @@ public class Plain extends JLayeredPane {
 			// find addin line
 			findaddinline(dl);
 
-			dl.update(); // island propagation
-
+			// island propagation
+			dl.updateWholeTree();
 		}
 
 		// helper function for draggingNodes to check whether some lines are
@@ -2393,7 +2393,7 @@ public class Plain extends JLayeredPane {
 
 			for (Line hihi : parentss) {
 				hihi.end = new Point(dragLabel.location.x + dragLabel.getWidth() / 2,
-						dragLabel.location.y + dragLabel.label.getLocation().y + dragLabel.label.getHeight());
+						dragLabel.location.y + dragLabel.label.getLocation().y + dragLabel.getHeight());
 				hihi.parent = dragLabel;
 				dragLabel.childrenlines.add(hihi);
 				if (hihi.children != null) {
@@ -2481,7 +2481,6 @@ public class Plain extends JLayeredPane {
 				int tostart = 0;
 				// check whether to move lines
 				for (Line xy : linelist) {
-					//// inRange function needs to be adjusted for long lines
 					if (inRange(xy, realInLocation)) {
 						double x1 = xy.start.getX();
 						double y1 = xy.start.getY();
@@ -2738,14 +2737,13 @@ public class Plain extends JLayeredPane {
 
 			// the normal form of dragging, to notice ready lines and nodes
 			else {
-				// set the new location and properties for the dragLabel
-				// mark ready nodes and ready lines to orange
-				draggingNodes(now.x, now.y, dragLabel);
-
 				// update the parent-children relation for dragLabel
 				// this is not needed in MouseMoved because MouseMoved is only
 				// used in adding nodes
 				updatePC(dragLabel);
+				// set the new location and properties for the dragLabel
+				// mark ready nodes and ready lines to orange
+				draggingNodes(now.x, now.y, dragLabel);
 			}
 			if(dragLabel!=null){
 				dragLabel.update();
@@ -2904,8 +2902,8 @@ public class Plain extends JLayeredPane {
 				if (clicked != 4) {
 					labeler.setBorder(new BevelBorder(BevelBorder.RAISED));
 				}
-				dragLabel.update();
-
+				dragLabel.updateWholeTree();
+				dragLabel.updateWholeTree(); // has to be done twice to fix some lines TODO fix this garbage
 			}
 
 			// if just pressed on one node in the drawroom without dragging it

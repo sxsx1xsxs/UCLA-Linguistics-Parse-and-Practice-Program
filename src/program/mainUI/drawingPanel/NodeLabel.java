@@ -241,6 +241,16 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 				}
 			}
 		}
+
+		public void updateWholeTree(){
+			if(children.isEmpty()){
+				update();
+			} else {
+				for(NodeLabel c : children){
+					c.updateWholeTree();
+				}
+			}
+		}
 		
 		public void attachTo(Plain p){
 			plain=p;

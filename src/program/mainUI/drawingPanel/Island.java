@@ -31,7 +31,7 @@ public class Island extends NodeLabel{
         int height = newRightCorner.y - newLocation.y ;
         setBounds(newLocation.x,newLocation.y ,width,height);
         label.setLocation(0,0);
-        if(children.size()==1){
+        if(children.size()==1 && parents.size()==1){
             // if we have exactly one child, we should try to make it look like the lines go through the island
             // to the node below it. To do this, we have to make the lines overlap.
             Point upperMid = upperMid();
@@ -62,7 +62,7 @@ public class Island extends NodeLabel{
     @Override
     public Point lowerMid(){
         if(parents.isEmpty()){
-            return super.lowerMid();
+            return new Point(location.x + getWidth()/2,location.y);
         }
         return parents.get(0).lowerMid();
     }

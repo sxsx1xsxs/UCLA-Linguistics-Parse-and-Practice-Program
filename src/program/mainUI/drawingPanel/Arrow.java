@@ -17,7 +17,7 @@ public class Arrow extends Line{
     public Arrow(Plain p){
         attachTo(p);
     }
-    static int BOTTOM_PAD=30;
+    static int BOTTOM_PAD=20;
     @Override
     public void paintSelf(Graphics2D g){
         if(parent == null || children == null) {
