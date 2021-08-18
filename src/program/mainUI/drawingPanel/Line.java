@@ -139,4 +139,30 @@ public class Line {
 	public Line makeCopy(Plain p){
 		return new Line(p);
 	}
+	public boolean inRange(Point p) {
+		int startX = start.x;
+		int startY = start.y;
+		int endX = end.x;
+		int endY = end.y;
+		return inRangeMath(startX,startY,endX,endY,p);
+	}
+	public boolean inRangeMath(int startX, int startY, int endX, int endY, Point p){
+		// decides if a point p is in range of a line by projection
+		int px = p.x;
+		int py = p.y;
+		double length = Math.sqrt((startX - endX) * (startX - endX) + (startY - endY) * (startY - endY));
+		// Create a projection of point p onto the line, centered on start
+		// Perp is the perpindicular coordinate, par is the parallel point to the line projection
+		// to do this we need to make a vector, we do so below.
+		int vecX = endX - startX;
+		int vecY = endY - startY;
+		double par = ((double)(px - startX)*vecX + (py-startY)*vecY)/length;
+		if(par > 0 && par < length){// if the points projection is on the line
+			double pointLengthSquared = (px - startX) * (px - startX) + (py - startY) * (py - startY);
+			// since we only care about the magnitude of the perpindicular line, we calculate the square by pythagorean theorem
+			double perpSquare = pointLengthSquared - par*par;
+			return perpSquare <= 25;
+		}
+		return false;
+	}
 }

@@ -1,12 +1,12 @@
 package program.mainUI.drawingPanel;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class Arrow extends Line{
+    Vector<Point> pointList = new Vector<>();
     @Override
     public Line makeCopy(Plain p){
         return new Arrow(p);
@@ -18,6 +18,16 @@ public class Arrow extends Line{
         attachTo(p);
     }
     static int BOTTOM_PAD=20;
+    @Override
+    public boolean inRange(Point p){
+        int size = pointList.size() - 1;
+        for(int i = 0; i < size;i++){
+            boolean result = inRangeMath(pointList.get(i).x,pointList.get(i).y,
+                    pointList.get(i+1).x,pointList.get(i+1).y,p);
+            if(result) return result;
+        }
+        return false;
+    }
     @Override
     public void paintSelf(Graphics2D g){
         if(parent == null || children == null) {
@@ -119,9 +129,30 @@ public class Arrow extends Line{
         } else {
             drawArrowHead(g,new Point(childrenX,childrenY), new Point(childrenX,minY + BOTTOM_PAD));
         }
+        pointList.clear(); // to add things to the list
+        PathIterator i = path.getPathIterator(null);
+        while (!i.isDone()) {
+            float[] coords = new float[6];
+            int segType = i.currentSegment(coords);
+            switch (segType){
+                case PathIterator.SEG_MOVETO:
+                case PathIterator.SEG_LINETO:
+                    pointList.add(new Point((int)coords[0], (int)coords[1]));
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    pointList.add(new Point((int)coords[0], (int)coords[1]));
+                    pointList.add(new Point((int)coords[2], (int)coords[3]));
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    pointList.add(new Point((int)coords[0], (int)coords[1]));
+                    pointList.add(new Point((int)coords[2], (int)coords[3]));
+                    pointList.add(new Point((int)coords[4], (int)coords[5]));
+                    break;
+            }
+            i.next();
+        }
+
         g.draw(path);
-        g.setColor(Color.red);
-        g.fillOval(start.x-radius,start.y,radius*2,radius*2);
     }
     // function from https://coderanch.com/t/340443/java/Draw-arrow-head-line
     // minor modifications to remove color customization

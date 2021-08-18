@@ -21,16 +21,7 @@ import java.util.Collections;
 import java.util.Stack;
 import java.util.Vector;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.undo.UndoManager;
@@ -209,6 +200,24 @@ public class Plain extends JLayeredPane {
 	public void changeGrammar(Grammar g){
 		grammar=g;
 
+	}
+
+	private void maintainTopAlignment(){
+		if(list.isEmpty()) return;
+		int minY = Integer.MAX_VALUE;
+		// Get label with minimum y
+		for(NodeLabel node : list){
+			if(node.location.y < minY) minY = node.location.y;
+		}
+		// I hate to traverse the list twice, but I have to get the minimum before I can subtract all of these values
+		for(NodeLabel node : list){
+			node.location.y -= minY;
+			node.setLocation(node.location.x,node.location.y);
+		}
+		for(Line line : linelist){
+			line.start.y -= minY;
+			line.end.y -= minY;
+		}
 	}
 	// the whole tree information can be copied after calling this function and
 	// copyLinelist(Vector<NodeLaebel>)
@@ -412,6 +421,7 @@ public class Plain extends JLayeredPane {
 		for(NodeLabel x : list){
 			x.update();
 		}
+		maintainTopAlignment();
 		repaint();
 	}
 
@@ -871,30 +881,6 @@ public class Plain extends JLayeredPane {
 
 		repaint();
 
-	}
-
-	static boolean inRange(Line line, Point p) {
-		// decides if a point p is in range of a line by projection
-		int startX = line.start.x;
-		int startY = line.start.y;
-		int endX = line.end.x;
-		int endY = line.end.y;
-		int px = p.x;
-		int py = p.y;
-		double length = Math.sqrt((startX - endX) * (startX - endX) + (startY - endY) * (startY - endY));
-		// Create a projection of point p onto the line, centered on start
-		// Perp is the perpindicular coordinate, par is the parallel point to the line projection
-		// to do this we need to make a vector, we do so below.
-		int vecX = endX - startX;
-		int vecY = endY - startY;
-		double par = ((double)(px - startX)*vecX + (py-startY)*vecY)/length;
-		if(par > 0 && par < length){// if the points projection is on the line
-			double pointLengthSquared = (px - startX) * (px - startX) + (py - startY) * (py - startY);
-			// since we only care about the magnitude of the perpindicular line, we calculate the square by pythagorean theorem
-			double perpSquare = pointLengthSquared - par*par;
-			return perpSquare <= 25;
-		}
-		return false;
 	}
 
 	// adjust a tree from the head node passed to all the way down, but do
@@ -1951,7 +1937,6 @@ public class Plain extends JLayeredPane {
 		c.fill = GridBagConstraints.BOTH;
 		c.insets = new Insets(5, 10, 10, 10);
 		back.add(info, c);
-
 	}
 
 	class Top extends JPanel {
@@ -2195,26 +2180,11 @@ public class Plain extends JLayeredPane {
 				}
 				;
 			}
-			/* draws a line over the old line, I'm deprecating this as the lines already change color, but not deleting it because the professor may prefer the old setup
-			if(dline.size()>0){
-				for (Line xy : dline) {
-
-					g2.setStroke(new BasicStroke(2));
-					g.setColor(Color.blue);
-
-					g.drawLine(xy.start.x+plain.getLocation(2).x+adjust.x, xy.start.y+plain.getLocation(2).y +adjust.y,
-							xy.end.x+plain.getLocation(2).x+adjust.x , xy.end.y +plain.getLocation(2).y+adjust.y);
-				}
-			}
-			*/
-
-
 			//drawroom.repaint();
 		}
 	}
 
 	public class DrawPanel extends JScrollPane {
-
 		JPopupMenu menu = new JPopupMenu("Popup");
 		JMenuItem delete = new JMenuItem("delete");
 		public Canvas canvas = new Canvas();
@@ -2242,12 +2212,6 @@ public class Plain extends JLayeredPane {
 
 			});
 		}
-
-
-
-
-
-
 	}
 
 	public class Canvas extends JPanel{
@@ -2481,7 +2445,7 @@ public class Plain extends JLayeredPane {
 				int tostart = 0;
 				// check whether to move lines
 				for (Line xy : linelist) {
-					if (inRange(xy, realInLocation)) {
+					if (xy.inRange(realInLocation)) {
 						double x1 = xy.start.getX();
 						double y1 = xy.start.getY();
 						double x2 = xy.end.getX();
@@ -2588,7 +2552,7 @@ public class Plain extends JLayeredPane {
 				// font first
 				xy.color = 0;
 
-				if (inRange(xy, realInLocation)) {
+				if (xy.inRange(realInLocation)) {
 					// mark lines as blue to indicate close enough as chosen
 					xy.color = 1;
 
