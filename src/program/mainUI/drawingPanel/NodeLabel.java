@@ -600,13 +600,20 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			}
 			return new Point(x,y);
 		}
-
 	public class ML extends MouseAdapter {
-
+			private boolean showGraphics = true;
+			public void setShowGraphics(boolean val){
+				showGraphics = val;
+			}
+			public boolean getShowGraphics(){
+				return showGraphics;
+			}
 			@Override
 			public void mouseExited(MouseEvent me) {
-				label.setBorder(null);
-				plain.drawroom.repaint();
+				if(showGraphics){
+					label.setBorder(null);
+					plain.drawroom.repaint();
+				}
 				Point zz = me.getPoint();
 				Point hh = label.getLocation();
 				Point xx = NodeLabel.super.getLocation();
@@ -634,15 +641,18 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			public void mouseEntered(MouseEvent me)
 
 			{
-				label.setForeground(Color.blue);
-				label.setBorder(new LineBorder(Color.black, 2));
 				//label.setSize(getPreferredSize());
 				//plain.drawroom.repaint();
-				plain.info.setText("Node "+ label.getText() + " is ready to be dragged or chosen");
+				if(showGraphics){
+					label.setForeground(Color.blue);
+					label.setBorder(new LineBorder(Color.black, 2));
+					plain.info.setText("Node "+ label.getText() + " is ready to be dragged or chosen");
+				}
 				plain.info.revalidate();
 				plain.info.repaint();
-				repaint();
-
+				if(showGraphics){
+					repaint();
+				}
 			}
 
 			@Override

@@ -1,11 +1,19 @@
 package program.mainUI.drawingPanel;
 
+import javax.swing.*;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
 public class Island extends NodeLabel{
     static int horiPadding = 10;
     static int vertPadding = 10;
+    static int borderPadding = 5;
+    // JLabels to position around the borders it looks like they're clickable
+    private JLabel right = new JLabel();
+    private JLabel left = new JLabel();
+    private JLabel bottom = new JLabel();
     public Island(Plain p) {
         super("Island", p);
         setSize(50,50);
@@ -15,6 +23,20 @@ public class Island extends NodeLabel{
         label.setLocation(0,0);
         label.setOpaque(true);
         label.setSize(horiPadding, vertPadding);
+        label.setFont(label.getFont().deriveFont(0.0F));
+        MouseListener adapter = label.getMouseListeners()[0];
+        ((ML)adapter).setShowGraphics(false);
+        right.addMouseListener(adapter);
+        right.addMouseMotionListener((MouseMotionListener) adapter);
+        left.addMouseListener(adapter);
+        left.addMouseMotionListener((MouseMotionListener) adapter);
+        bottom.addMouseListener(adapter);
+        bottom.addMouseMotionListener((MouseMotionListener) adapter);
+        bottom.setBackground(Color.green);
+        add(bottom);
+        add(left);
+        add(right);
+        label.setBackground(new Color(0,0,0,0)); // transparent
         grammarType = 1;
     }
     private void resize(){
@@ -30,7 +52,6 @@ public class Island extends NodeLabel{
         int width = newRightCorner.x - newLocation.x;
         int height = newRightCorner.y - newLocation.y ;
         setBounds(newLocation.x,newLocation.y ,width,height);
-        label.setLocation(0,0);
         if(children.size()==1 && parents.size()==1){
             // if we have exactly one child, we should try to make it look like the lines go through the island
             // to the node below it. To do this, we have to make the lines overlap.
@@ -58,6 +79,10 @@ public class Island extends NodeLabel{
         int count = plain.drawroom.canvas.getComponentCount();
         plain.drawroom.canvas.setComponentZOrder(this,count-1);
         location = getLocation();
+        label.setBounds(0,0,width,borderPadding); // the top
+        bottom.setBounds(0,height-borderPadding,width,borderPadding);
+        right.setBounds(width-borderPadding,0,borderPadding,height);
+        left.setBounds(0,0,borderPadding,height);
     }
     @Override
     public Point lowerMid(){
@@ -109,7 +134,6 @@ public class Island extends NodeLabel{
     @Override
     public void setColor(){
         super.setColor();
-        label.setBackground(label.getForeground()); // update the bg to be the same as the fg to get the blocky square button look
     }
     @Override
     public void update(){
