@@ -51,9 +51,11 @@ public class LMenuBar extends JMenuBar {
 	public JMenuItem large = new JMenuItem("Larger");
 	public JMenuItem small = new JMenuItem("Smaller");
 	public JMenuItem customize = new JMenuItem("Customize (Please wait)");
+	public JMenuItem resetFont = new JMenuItem("Reset to Default");
 	public JMenuItem tlarge=new JMenuItem("Larger");
 	public JMenuItem tsmall = new JMenuItem("Smaller");
 	public JMenuItem tcustomize = new JMenuItem("Customize (Please wait)");
+	public JMenuItem tresetFont = new JMenuItem("Reset to Default");
 
 	//Setting
 	public JCheckBoxMenuItem turnoffRC=new JCheckBoxMenuItem("Turn off rule checking");
@@ -69,6 +71,10 @@ public class LMenuBar extends JMenuBar {
 	public JMenuItem wd = new JMenuItem("Width-");
 	public JMenuItem hd = new JMenuItem("Height-");
 
+	// Movement mode
+	public JMenu movement = new JMenu("Movements");
+	public JMenuItem drawArrow = new JMenuItem("Make Movement Arrow (Click Start and End)");
+	public JMenuItem drawIsland = new JMenuItem("Mark Node as Constituent (Click on The Node)");
 
 	// Mode
 	public JMenuItem freedrawing = new JMenuItem("Draw Tree");
@@ -151,10 +157,12 @@ public class LMenuBar extends JMenuBar {
 		system.add(large);
 		system.add(small);
 		system.add(customize);
+		system.add(resetFont);
 
 		tree.add(tlarge);
 		tree.add(tsmall);
 		tree.add(tcustomize);
+		tree.add(tresetFont);
 
 
 		JMenu setting=new JMenu("Settings");
@@ -170,9 +178,10 @@ public class LMenuBar extends JMenuBar {
 		format.add(topdown);
 		format.add(bottomup);
 
+		movement.add(drawArrow);
+		movement.add(drawIsland);
 
-
-		JMenu mode = new JMenu("Task");		
+		JMenu mode = new JMenu("Task");
 		mode.add(freedrawing);
 		//		mode.add(teacher);
 		mode.add(parse);
@@ -224,6 +233,7 @@ public class LMenuBar extends JMenuBar {
 		super.add(edit);
 		super.add(view);
 		super.add(format);
+		super.add(movement);
 		super.add(mode);
 		super.add(setting);
 		super.add(help);

@@ -18,7 +18,7 @@ public class Line {
 	public NodeLabel parent = null;
 	public NodeLabel children = null;
 	//for those functions that interacts with Plain
-	Plain plain;
+	protected Plain plain;
 
 	public Line(Plain p){
 		attachTo(p);

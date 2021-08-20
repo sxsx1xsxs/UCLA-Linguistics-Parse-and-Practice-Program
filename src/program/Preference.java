@@ -51,9 +51,9 @@ public class Preference {
 		
 		//<< Constants		
 		public static String newline=System.getProperty("line.separator");	    
-		private static Font default_font= UIManager.getDefaults().getFont("TabbedPane.font");
-		private static int default_font_size=default_font.getSize();
-		private static String default_font_name=default_font.getFontName();
+		public static Font default_font= UIManager.getDefaults().getFont("TabbedPane.font");
+		public static int default_font_size=default_font.getSize();
+		public static String default_font_name=default_font.getFontName();
 		
 		public static String grammar_path="grammar.txt";
 		//>> Constants

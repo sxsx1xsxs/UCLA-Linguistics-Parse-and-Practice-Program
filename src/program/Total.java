@@ -189,6 +189,12 @@ public class Total extends JPanel {
 			}
 
 		});
+		menu.resetFont.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				changeSystemFont(Preference.default_font);
+			}
+		});
 
 		menu.tsmall.addActionListener(new ActionListener(){
 
@@ -208,6 +214,13 @@ public class Total extends JPanel {
 				int input=pp.getInt("TreeSize")+2;
 				pp.setInt("TreeSize", input);
 				updateTreeFonts();
+			}
+		});
+
+		menu.tresetFont.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				changeTreeFont(Preference.default_font);
 			}
 		});
 
@@ -281,6 +294,30 @@ public class Total extends JPanel {
 				treeMode.drawingPanel.adjust();
 			}
 
+		});
+
+		menu.drawIsland.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				if(plain.getClicked()==3){
+					try{
+						NodeLabel n = (NodeLabel)(plain.drawroom.canvas.getComponentAt(plain.getBeforeMove()));
+						plain.addIslandParent(n);
+						plain.setClicked(0);
+					} catch (Exception e ){
+
+					}
+				} else {
+					plain.setClicked(12); // put it in mark constituent mode
+				}
+			}
+		});
+
+		menu.drawArrow.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				plain.arrowMode=true;
+			}
 		});
 
 		menu.topdown.addActionListener(new ActionListener(){
@@ -1439,9 +1476,13 @@ public class Total extends JPanel {
 
 		for(Component c : plain.drawroom.canvas.getComponents()){
 			NodeLabel x = (NodeLabel) c;
-			x.label.setFont(font);
+			x.setFonts(font);
 			x.setSize(x.label.getPreferredSize());
 		}
+		// update after we change all the fonts
+		plain.revalidate();
+		plain.repaint();
+		plain.maintainTopAlignment();
 		treeMode.drawingPanel.adjust();
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
 	}

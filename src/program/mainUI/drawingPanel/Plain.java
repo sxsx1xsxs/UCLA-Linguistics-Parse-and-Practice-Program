@@ -162,6 +162,7 @@ public class Plain extends JLayeredPane {
 	// clicked=4-->after dragging the nodes got from drawroom --drag
 	// clicked=10-->while drawing a line by dragging --drag
 	// clicked=11-->after first clicked on the grammar panel and then pressed
+	// clicked=12-->Ready to add a constituent to a node
 	// somewhere again--press
 
 	/// functions
@@ -170,7 +171,26 @@ public class Plain extends JLayeredPane {
 
 
 	// public functions
-
+	public int getClicked(){
+		return clicked;
+	}
+	public void setClicked(int val){
+		clicked = val;
+	}
+	public Point getBeforeMove(){
+		return beforeMove;
+	}
+	public void addIslandParent(NodeLabel n){
+		Island island = new Island(this);
+		add(island);
+		for(NodeLabel parent : n.parents){
+			removelines(parent, n);
+			addlines(parent, island);
+		}
+		addlines(island,n);
+		n.update();
+		n.stop();
+	}
 	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
 		java.util.Enumeration keys = UIManager.getDefaults().keys();
 		while (keys.hasMoreElements()) {
@@ -202,7 +222,7 @@ public class Plain extends JLayeredPane {
 
 	}
 
-	private void maintainTopAlignment(){
+	public void maintainTopAlignment(){
 		if(list.isEmpty()) return;
 		int minY = Integer.MAX_VALUE;
 		// Get label with minimum y
@@ -217,6 +237,10 @@ public class Plain extends JLayeredPane {
 		for(Line line : linelist){
 			line.start.y -= minY;
 			line.end.y -= minY;
+		}
+		for(NodeLabel n : list){
+			if(n.children.isEmpty())
+				n.update();
 		}
 	}
 	// the whole tree information can be copied after calling this function and
@@ -1384,10 +1408,9 @@ public class Plain extends JLayeredPane {
 		return r;
 	}
 	public Arrow addArrow(NodeLabel x, NodeLabel y){
-		Arrow arrow = new Arrow();
+		Arrow arrow = new Arrow(this);
 		arrow.parent = x;
 		arrow.children = y;
-		arrow.plain = this;
 		x.childrenArrows.add(arrow);
 		y.parentArrows.add(arrow);
 		linelist.add(arrow);
@@ -2477,6 +2500,9 @@ public class Plain extends JLayeredPane {
 						deleteL.add(i);
 					}
 				}
+			} else if(clicked==12){
+				addIslandParent(dragLabel);
+				clicked=0;
 			} else { // indicate the status of choosing a node from drawroom
 				clicked = 3;
 				beforeMove=dragLabel.location;

@@ -317,7 +317,6 @@ public class Interface extends JPanel {
 		 * the label denoting mode can be "Teacher Mode" or "Practice Mode"
 		 */
 		JLabel tlabel = new JLabel("Teacher Mode");
-		JCheckBox arrowMode = new JCheckBox("Draw Arrows");
 		// the right side
 		// for edit mode
 		JButton start = new JButton("Start");
@@ -371,38 +370,32 @@ public class Interface extends JPanel {
 			c.gridx = 5;
 			c.gridy = 0;
 			c.gridwidth = 1;
-			c.weightx = 0;
-			add(arrowMode, c);
-
-			c.gridx = 6;
-			c.gridy = 0;
-			c.gridwidth = 1;
 			c.weightx = 1;
 			c.fill = GridBagConstraints.NONE;
 			add(tlabel, c);
 
-			c.gridx = 7;
+			c.gridx = 6;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
 			c.fill = GridBagConstraints.BOTH;
 			add(start, c);
 
-			c.gridx = 8;
+			c.gridx = 7;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
 			c.fill = GridBagConstraints.BOTH;
 			add(sl, c);
 
-			c.gridx = 9;
+			c.gridx = 8;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
 			c.fill = GridBagConstraints.BOTH;
 			add(clean, c);
 
-			c.gridx = 10;
+			c.gridx = 9;
 			c.gridy = 0;
 			c.gridwidth = 1;
 			c.weightx = 0;
@@ -550,10 +543,6 @@ public class Interface extends JPanel {
 
 			});
 
-			arrowMode.addItemListener((ItemEvent e) -> {
-				drawingPanel.arrowMode = e.getStateChange()==ItemEvent.SELECTED;
-			});
-			
 			next.addActionListener(new ActionListener(){
 
 				@Override

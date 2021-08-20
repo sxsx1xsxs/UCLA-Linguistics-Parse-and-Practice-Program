@@ -85,6 +85,10 @@ public class Island extends NodeLabel{
         left.setBounds(0,0,borderPadding,height);
     }
     @Override
+    public void setFonts(Font f){
+        // do nothing, we don't wanna change our font!
+    }
+    @Override
     public Point lowerMid(){
         if(parents.isEmpty()){
             return new Point(location.x + getWidth()/2,location.y);

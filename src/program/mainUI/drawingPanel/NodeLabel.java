@@ -564,6 +564,9 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			Font font = label.getFont();
 			setFont(font);
 		}
+		public void setFonts(Font f){
+			label.setFont(f);
+		}
 		public Point lowerMid(){
 			return new Point(location.x + getWidth()/2, location.y + getHeight()- label.getLocation().y);
 		}

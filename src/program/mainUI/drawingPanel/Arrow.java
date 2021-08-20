@@ -2,7 +2,6 @@ package program.mainUI.drawingPanel;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.util.Iterator;
 import java.util.Vector;
 
 public class Arrow extends Line{
@@ -16,6 +15,11 @@ public class Arrow extends Line{
     }
     public Arrow(Plain p){
         attachTo(p);
+    }
+    @Override
+    public void attachTo(Plain p){
+        super.attachTo(p);
+        p.arrowMode=false;
     }
     static int BOTTOM_PAD=20;
     @Override
