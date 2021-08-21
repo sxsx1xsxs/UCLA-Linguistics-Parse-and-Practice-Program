@@ -62,6 +62,7 @@ public class Plain extends JLayeredPane {
 	private int dragLabelWidthDiv2;
 	private int dragLabelHeightDiv2;
 	private JPanel clickedPanel = null;
+	private int lowestLocation;
 
 
 
@@ -222,25 +223,27 @@ public class Plain extends JLayeredPane {
 
 	}
 
-	public void maintainTopAlignment(){
+	public void maintainBottomAlignment(){
 		if(list.isEmpty()) return;
-		int minY = Integer.MAX_VALUE;
+		int maxY = Integer.MIN_VALUE;
 		// Get label with minimum y
 		for(NodeLabel node : list){
-			if(node.location.y < minY) minY = node.location.y;
+			if(node.location.y > maxY) maxY = node.location.y + node.getHeight();
 		}
+		int diff = lowestLocation - maxY;
 		// I hate to traverse the list twice, but I have to get the minimum before I can subtract all of these values
 		for(NodeLabel node : list){
-			node.location.y -= minY;
+			node.location.y += diff;
 			node.setLocation(node.location.x,node.location.y);
 		}
 		for(Line line : linelist){
-			line.start.y -= minY;
-			line.end.y -= minY;
+			line.start.y += diff;
+			line.end.y += diff;
 		}
 		for(NodeLabel n : list){
-			if(n.children.isEmpty())
+			if(n.children.isEmpty()){
 				n.update();
+			}
 		}
 	}
 	// the whole tree information can be copied after calling this function and
@@ -445,7 +448,7 @@ public class Plain extends JLayeredPane {
 		for(NodeLabel x : list){
 			x.update();
 		}
-		maintainTopAlignment();
+		maintainBottomAlignment();
 		repaint();
 	}
 
@@ -1236,9 +1239,8 @@ public class Plain extends JLayeredPane {
 		}
 		for (Line xy : linelist)
 			xy.update();
-
+		maintainBottomAlignment();
 		repaint();
-
 	}
 
 	public void topDown() {
@@ -1649,6 +1651,8 @@ public class Plain extends JLayeredPane {
 		sg = new SingleColumnPanel(grammar);
 		info = new JLabel();
 
+		lowestLocation = drawroom.canvas.getPreferredSize().height - Arrow.BOTTOM_PAD*2;
+
 		// other attributes
 		now = null;
 		dlabel = null;
@@ -1873,7 +1877,6 @@ public class Plain extends JLayeredPane {
 				now = new Point(location.x + relLocation.x, location.y + relLocation.y);
 				MouseEvent me = new MouseEvent(plain, MouseEvent.MOUSE_MOVED, 0, 0, now.x, now.y, 0, false);
 				myMouseAdapter.mouseMoved(me);
-
 			}
 
 			@Override
@@ -2216,7 +2219,7 @@ public class Plain extends JLayeredPane {
 			canvas.setPreferredSize(new Dimension(3000, 3000));
 			canvas.setBackground(Color.white);
 			canvas.setLayout(null);
-			super.setViewportView(canvas);
+			setViewportView(canvas);
 			menu.add(delete);
 			delete.addActionListener(new ActionListener() {
 
@@ -2883,7 +2886,10 @@ public class Plain extends JLayeredPane {
 
 				// 4.add the dragLabel to list
 				list.add(dragLabel);
-
+				// We have to call updateWholeTree before addinline as the islands have a tendency to "jump" after having
+				// something added to them, which addinline might then use as an excuse to introduce a circular dependency!
+				// We fix this by updating the whole tree and having all islands resize themselves.
+				dragLabel.updateWholeTree();
 				// if the dragLabel is added into a line
 				addinline(dragLabel);
 

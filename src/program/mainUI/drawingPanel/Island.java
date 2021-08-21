@@ -11,6 +11,7 @@ public class Island extends NodeLabel{
     static int vertPadding = 10;
     static int borderPadding = 5;
     // JLabels to position around the borders it looks like they're clickable
+    private JLabel top = new JLabel();
     private JLabel right = new JLabel();
     private JLabel left = new JLabel();
     private JLabel bottom = new JLabel();
@@ -21,7 +22,6 @@ public class Island extends NodeLabel{
         right_click_menu.remove(1);
         setLayout(null);
         label.setLocation(0,0);
-        label.setOpaque(true);
         label.setSize(horiPadding, vertPadding);
         label.setFont(label.getFont().deriveFont(0.0F));
         MouseListener adapter = label.getMouseListeners()[0];
@@ -32,7 +32,6 @@ public class Island extends NodeLabel{
         left.addMouseMotionListener((MouseMotionListener) adapter);
         bottom.addMouseListener(adapter);
         bottom.addMouseMotionListener((MouseMotionListener) adapter);
-        bottom.setBackground(Color.green);
         add(bottom);
         add(left);
         add(right);

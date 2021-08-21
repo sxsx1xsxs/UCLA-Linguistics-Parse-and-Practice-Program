@@ -1482,9 +1482,19 @@ public class Total extends JPanel {
 		// update after we change all the fonts
 		plain.revalidate();
 		plain.repaint();
-		plain.maintainTopAlignment();
+		plain.maintainBottomAlignment();
 		treeMode.drawingPanel.adjust();
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
+		SwingUtilities.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				Rectangle bounds = plain.drawroom.getViewport().getViewRect();
+				JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
+				vertical.setValue( (vertical.getMaximum() - bounds.height)  );
+			}
+		});
 	}
 	public static void main(String[] args) {
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("SystemFontSize")));
