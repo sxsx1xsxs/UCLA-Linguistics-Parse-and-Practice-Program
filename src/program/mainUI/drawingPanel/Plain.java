@@ -941,7 +941,11 @@ public class Plain extends JLayeredPane {
 				NodeLabel now = process1.pop();
 
 				for (NodeLabel c : now.children) {
-					c.level = now.level + 1;
+				    if(c.grammarType==1){
+				    	c.level = now.level;
+					}else{
+						c.level = now.level + 1;
+					}
 					process1.add(c);
 					if (c.children.size() == 0 && c.type != 1) {
 						if (c.level > maxnonwords) {
@@ -1048,7 +1052,7 @@ public class Plain extends JLayeredPane {
 				}
 			}
 
-			// set y-cor for ever node in the subtree
+			// set y-cor for every node in the subtree
 			for (NodeLabel wh : tree) {
 				if (wh.level > 1) {
 					wh.location.y = (int) (head.location.y
@@ -1235,7 +1239,7 @@ public class Plain extends JLayeredPane {
 
 		for (NodeLabel y : here) {
 			adjustOneTree(y);
-			// repaint();
+			y.updateWholeTree();
 		}
 		for (Line xy : linelist)
 			xy.update();
@@ -2880,7 +2884,10 @@ public class Plain extends JLayeredPane {
 				// the following two parts must be before the third part
 				// 2.drawlines for ready nodes
 				orangeLines(dragLabel);
-
+				// We have to call updateWholeTree before addinline as the islands have a tendency to "jump" after having
+				// something added to them, which addinline might then use as an excuse to introduce a circular dependency!
+				// We fix this by updating the whole tree and having all islands resize themselves.
+				dragLabel.updateWholeTree();
 				// 3.pair up with ready lines
 				pairupwithLines(dragLabel);
 
