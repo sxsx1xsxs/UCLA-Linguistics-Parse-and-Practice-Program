@@ -1289,7 +1289,7 @@ public class Plain extends JLayeredPane {
 			}
 		}
 		if(dragLabel != null && dragLabel.location.x >= lowX && dragLabel.location.x <= highX){
-			int candidateY = dragLabel.location.y + dragLabel.getHeight();
+			int candidateY = dragLabel.getArrowLow();
 			if(candidateY > minY){
 				minY = candidateY;
 			}

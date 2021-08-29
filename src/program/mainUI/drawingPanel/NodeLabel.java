@@ -404,6 +404,9 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			});
 			// menu.add(changeto);
 		}
+		public int getArrowLow(){
+			return location.y + getHeight();
+		}
 		public NodeLabel makeBasicCopy(Plain p){
 			return new NodeLabel(getLabelName(),p);
 		}

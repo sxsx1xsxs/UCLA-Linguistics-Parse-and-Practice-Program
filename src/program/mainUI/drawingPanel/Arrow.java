@@ -32,6 +32,52 @@ public class Arrow extends Line{
         }
         return false;
     }
+    private Island[] getFirstDifferentIslands(NodeLabel n1, NodeLabel n2){
+        // returns an array with size two which gives the two outermost islands n1 and n2 do not share
+        // Assumes that the two nodes are in a tree, ie they only have one parent(why is this not already mandated by the program code?????)
+
+        // traverse up two nodes trees to make a list of islands.
+        NodeLabel traverseNode = n1;
+        Vector<NodeLabel> n1Islands = new Vector<>();
+        while(traverseNode!=null){
+            if(traverseNode.getClass() == Island.class){
+                n1Islands.add(traverseNode);
+            }
+            if(traverseNode.parents.isEmpty()){
+                traverseNode = null;
+            } else{
+                traverseNode = traverseNode.parents.firstElement();
+            }
+        }
+        Vector<NodeLabel> n2Islands = new Vector<>();
+        traverseNode = n2;
+        while(traverseNode!=null){
+            if(traverseNode.getClass() == Island.class){
+                n2Islands.add(traverseNode);
+            }
+            if(traverseNode.parents.isEmpty()){
+                traverseNode = null;
+            } else{
+                traverseNode = traverseNode.parents.firstElement();
+            }
+        }
+        // now that we have both lists, we traverse them backwards to find the outermost island that doesn't match
+        // we want to go outside of those two islands
+        int n1Iterator = n1Islands.size()-1;
+        int n2Iterator = n2Islands.size()-1;
+        while(n1Iterator >= 0 && n2Iterator >=0 && n1Islands.get(n1Iterator) == n2Islands.get(n2Iterator)){
+            n1Iterator--;
+            n2Iterator--;
+        }
+        Island[] returnArray = {null,null};
+        if(n1Iterator >=0){
+            returnArray[0] = (Island)n1Islands.get(n1Iterator);
+        }
+        if(n2Iterator >=0){
+            returnArray[1] = (Island)n2Islands.get(n2Iterator);
+        }
+        return returnArray;
+    }
     @Override
     public void paintSelf(Graphics2D g){
         if(parent == null || children == null) {
@@ -58,11 +104,11 @@ public class Arrow extends Line{
             g.setStroke(new BasicStroke(2.0f,BasicStroke.CAP_BUTT,BasicStroke.JOIN_BEVEL));
             g.setColor(Color.green);
         }
+        Island[] differingIslands = getFirstDifferentIslands(parent,children);
         // roadmap for the lines we draw
         // 1. a straight line down to our lowest point
         // 2. a curved line from our lowest point down to lowest point + padding
         // 3. another straight line up to the middle
-        // all locations are understood to be at the *bottom middle* of the node
         int parentX;
         int parentY;
         if(parent.children.isEmpty() || parent.grammarType==1){
@@ -103,7 +149,8 @@ public class Arrow extends Line{
         if(parent.children.isEmpty() || parent.grammarType==1){
             leftSegment = parentX;
         } else {
-            leftSegment = parentX < childrenX ? parent.upperLeftCorner().x - BOTTOM_PAD/2: parent.lowerRightCorner().x + BOTTOM_PAD/2;
+            NodeLabel segmentChooser = differingIslands[0] == null ? parent : differingIslands[0]; // if we have a differing island, we make it our "punchout" point to go to the left or right of
+            leftSegment = parentX < childrenX ? segmentChooser.upperLeftCorner().x - BOTTOM_PAD/2: segmentChooser.lowerRightCorner().x + BOTTOM_PAD/2;
             int dist = leftSegment-parentX;
             if(dist < 0){
                 path.curveTo(parentX + dist/3,parentY - 3*BOTTOM_PAD/24,parentX + dist,parentY - BOTTOM_PAD/12,leftSegment,parentY);
@@ -118,9 +165,10 @@ public class Arrow extends Line{
         if(children.children.isEmpty() || children.grammarType == 1){
             rightSegment = childrenX;
         } else {
-            rightSegment = childrenX < parentX ? children.upperLeftCorner().x - BOTTOM_PAD/2 : children.lowerRightCorner().x + BOTTOM_PAD/2;
+            NodeLabel segmentChooser = differingIslands[1] == null ? children : differingIslands[1]; // if we have a differing island, we make it our "punchout" point to go to the left or right of
+            rightSegment = childrenX < parentX ? segmentChooser.upperLeftCorner().x - BOTTOM_PAD/2 : segmentChooser.lowerRightCorner().x + BOTTOM_PAD/2;
         }
-        path.quadTo((parentX+rightSegment)/2,minY+BOTTOM_PAD,rightSegment,minY+BOTTOM_PAD/2);
+        path.quadTo((leftSegment+rightSegment)/2,minY+BOTTOM_PAD,rightSegment,minY+BOTTOM_PAD/2);
         path.lineTo(rightSegment,childrenY);
         if(rightSegment!=childrenX){
             int dist = rightSegment - childrenX;

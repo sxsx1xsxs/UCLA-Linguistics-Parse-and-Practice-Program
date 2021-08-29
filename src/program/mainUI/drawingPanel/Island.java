@@ -7,11 +7,10 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class Island extends NodeLabel{
-    static int horiPadding = 10;
-    static int vertPadding = 10;
+    static int horiPadding = 20;
+    static int vertPadding = 20;
     static int borderPadding = 5;
     // JLabels to position around the borders it looks like they're clickable
-    private JLabel top = new JLabel();
     private JLabel right = new JLabel();
     private JLabel left = new JLabel();
     private JLabel bottom = new JLabel();
@@ -82,6 +81,10 @@ public class Island extends NodeLabel{
         bottom.setBounds(0,height-borderPadding,width,borderPadding);
         right.setBounds(width-borderPadding,0,borderPadding,height);
         left.setBounds(0,0,borderPadding,height);
+    }
+    @Override
+    public int getArrowLow(){
+        return location.y + getHeight() - Arrow.BOTTOM_PAD;
     }
     @Override
     public void setFonts(Font f){
