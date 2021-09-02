@@ -439,6 +439,7 @@ public class Plain extends JLayeredPane {
 		for (NodeLabel x : list) {
 			// this step is important, sometimes when things are not showing up,
 			// check the size of the thing
+			x.makeGraphics();
 			x.setSize(x.getPreferredSize());
 			x.setColor();
 			drawroom.canvas.add(x);
@@ -448,6 +449,7 @@ public class Plain extends JLayeredPane {
 		for(NodeLabel x : list){
 			x.update();
 		}
+		adjust();
 		maintainBottomAlignment();
 		repaint();
 	}
@@ -466,6 +468,7 @@ public class Plain extends JLayeredPane {
 			//the same code is copied into setLocation in SentenceSetStorage, please 
 			//remember to modify both of them
 			NodeLabel add = new NodeLabel(y,plain);
+			add.makeGraphics();
 			i = (int) (i + widthIndex * add.label.getPreferredSize().getHeight());
 			add.setVisible(true);
 			add.setLocation(i, heightdraw);

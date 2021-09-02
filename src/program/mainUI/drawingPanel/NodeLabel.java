@@ -261,9 +261,13 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			super.setOpaque(false);
 			super.setLayout(new GridBagLayout());
 			label.setText(x);
-			Dimension labelsize = label.getPreferredSize();
 			plain=p;
-
+			// menu.add(changeto);
+		}
+		public void makeGraphics(){
+			// all of the graphical portion of the code
+			// done to make loading all of the node labels a little bit easier on the system
+			Dimension labelsize = label.getPreferredSize();
 			super.add(label);
 			super.setPreferredSize(new Dimension((int) (labelsize.getWidth() + labelsize.getHeight()),
 					(int) (labelsize.getHeight() * 2)));
@@ -299,8 +303,8 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			ctc.insets = new Insets(0, 0, 0, 0);
 			ctc.gridx = 1;
 			ctc.weightx = 0;
-			
-			
+
+
 			right_click_menu = new JPopupMenu();
 			final JButton change_to = new JButton("GO");
 			changeto.add(change_to, ctc);
@@ -402,9 +406,8 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 				}
 
 			});
-			// menu.add(changeto);
 		}
-		public int getArrowLow(){
+	public int getArrowLow(){
 			return location.y + getHeight();
 		}
 		public NodeLabel makeBasicCopy(Plain p){
