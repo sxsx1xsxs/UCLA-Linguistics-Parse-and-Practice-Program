@@ -59,11 +59,24 @@ public class Island extends NodeLabel{
             // to the node below it. To do this, we have to make the lines overlap.
             Point upperMid = upperMid();
             Point lowerMid = lowerMid();
-            for(Line child : childrenlines){
-                child.end = lowerMid;
+            Point intersectionPoint;
+            double xySlope = ((double) upperMid.y -(double) lowerMid.y)/((double)upperMid.x - (double)lowerMid.x);
+            if(Math.abs(xySlope) < 0.2){
+               // the error grows too large for small slopes, so we swap to calculating it based on the yx slope instead
+                double yxSlope = ((double) upperMid.x -(double) lowerMid.x)/((double)upperMid.y - (double)lowerMid.y);
+                double targetX = lowerMid.x < newLocation.x ? newLocation.x : newRightCorner.x;
+                double targetY = (targetX-(double)upperMid.x)/yxSlope + (double) upperMid.y;
+                intersectionPoint = new Point((int)targetX,(int)targetY);
+            } else{
+                double targetY = newLocation.y;
+                double targetX = (targetY-(double)upperMid.y)/xySlope + (double) upperMid.x;
+                intersectionPoint = new Point((int)targetX,(int)targetY);
             }
-            for(Line parent : parentlines){
-                parent.start = upperMid;
+            for(Line L : parentlines){
+                L.start = intersectionPoint;
+            }
+            for(Line L : childrenlines){
+                L.end= intersectionPoint;
             }
         } else {
             int pointLocation = newLocation.x + width/2;
