@@ -9,7 +9,7 @@ import java.awt.event.MouseMotionListener;
 public class Island extends NodeLabel{
     static int horiPadding = 20;
     static int vertPadding = 20;
-    static int borderPadding = 5;
+    static int borderPadding = 10;
     // JLabels to position around the borders it looks like they're clickable
     private JLabel right = new JLabel();
     private JLabel left = new JLabel();
@@ -61,16 +61,16 @@ public class Island extends NodeLabel{
             Point lowerMid = lowerMid();
             Point intersectionPoint;
             double xySlope = ((double) upperMid.y -(double) lowerMid.y)/((double)upperMid.x - (double)lowerMid.x);
-            if(Math.abs(xySlope) < 0.2){
-               // the error grows too large for small slopes, so we swap to calculating it based on the yx slope instead
-                double yxSlope = ((double) upperMid.x -(double) lowerMid.x)/((double)upperMid.y - (double)lowerMid.y);
-                double targetX = lowerMid.x < newLocation.x ? newLocation.x : newRightCorner.x;
-                double targetY = (targetX-(double)upperMid.x)/yxSlope + (double) upperMid.y;
-                intersectionPoint = new Point((int)targetX,(int)targetY);
-            } else{
-                double targetY = newLocation.y;
-                double targetX = (targetY-(double)upperMid.y)/xySlope + (double) upperMid.x;
-                intersectionPoint = new Point((int)targetX,(int)targetY);
+            double yxSlope = ((double) upperMid.x -(double) lowerMid.x)/((double)upperMid.y - (double)lowerMid.y);
+            // calculate the slopes intersecting the vertical and horizontal walls
+            double vertTargetX = lowerMid.x < newLocation.x ? newLocation.x : newRightCorner.x;
+            double vertTargetY = (vertTargetX-(double)upperMid.x)/yxSlope + (double) upperMid.y;
+            double horTargetY = newLocation.y;
+            double horTargetX = (horTargetY-(double)upperMid.y)/xySlope + (double) upperMid.x;
+            if(horTargetX <= newRightCorner.x && horTargetX >= newLocation.x){
+                intersectionPoint = new Point((int)horTargetX,(int)horTargetY);
+            } else {
+                intersectionPoint = new Point((int)vertTargetX,(int)vertTargetY);
             }
             for(Line L : parentlines){
                 L.start = intersectionPoint;

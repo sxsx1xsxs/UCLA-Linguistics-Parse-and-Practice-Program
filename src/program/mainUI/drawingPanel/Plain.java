@@ -185,11 +185,15 @@ public class Plain extends JLayeredPane {
 		Island island = new Island(this);
 		island.makeGraphics();
 		add(island);
-		for(NodeLabel parent : n.parents){
-			removelines(parent, n);
-			addlines(parent, island);
+		for(Line parentline : n.parentlines){
+			parentline.parent.children.remove(n);
+			parentline.parent.children.add(island);
+			n.parents.remove(parentline.parent);
+			parentline.children = island;
+			island.parentlines.add(parentline);
+			island.parents.add(parentline.parent);
 		}
-		addlines(island,n);
+		addlines(n,island);
 		n.update();
 		n.stop();
 	}
@@ -2514,8 +2518,8 @@ public class Plain extends JLayeredPane {
 					}
 				}
 			} else if(clicked==12){
-				addIslandParent(dragLabel);
 				clicked=0;
+				addIslandParent(dragLabel);
 			} else { // indicate the status of choosing a node from drawroom
 				clicked = 3;
 				beforeMove=dragLabel.location;
