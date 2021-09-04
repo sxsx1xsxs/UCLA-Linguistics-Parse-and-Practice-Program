@@ -16,7 +16,11 @@ public class Island extends NodeLabel{
     private JLabel bottom = new JLabel();
     public Island(Plain p) {
         super("Island", p);
-        makeGraphics();
+        grammarType = 1;
+    }
+    @Override
+    public void makeGraphics(){
+        super.makeGraphics();
         setSize(50,50);
         setBorder(new LineBorder(Color.red,2,true));
         right_click_menu.remove(1);
@@ -36,7 +40,6 @@ public class Island extends NodeLabel{
         add(left);
         add(right);
         label.setBackground(new Color(0,0,0,0)); // transparent
-        grammarType = 1;
     }
     private void resize(){
         if(children.isEmpty()){

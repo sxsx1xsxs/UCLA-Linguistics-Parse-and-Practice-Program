@@ -183,6 +183,7 @@ public class Plain extends JLayeredPane {
 	}
 	public void addIslandParent(NodeLabel n){
 		Island island = new Island(this);
+		island.makeGraphics();
 		add(island);
 		for(NodeLabel parent : n.parents){
 			removelines(parent, n);
@@ -461,6 +462,7 @@ public class Plain extends JLayeredPane {
 		Point zeroP= drawroom.getViewport().getViewPosition();
 
 		NodeLabel temp = new NodeLabel("oi",plain);
+		temp.makeGraphics();
 		int height = (int) (heightIndex * temp.label.getPreferredSize().getHeight());
 		int heightdraw = (int) (bounds.height -height-temp.getPreferredSize().getHeight())+zeroP.y;
 		int i = 40+zeroP.x;
@@ -2435,6 +2437,7 @@ public class Plain extends JLayeredPane {
 				} else {
 					dragLabel = new Island(plain);
 				}
+				dragLabel.makeGraphics();
 				dragLabel.setSize(dragLabel.getPreferredSize());
 				// having the half width and half height ready for later moving
 				// or dragging
