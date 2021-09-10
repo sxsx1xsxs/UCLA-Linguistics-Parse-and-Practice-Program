@@ -27,12 +27,24 @@ public class Line {
 	public Line(){
 		
 	}
-	
-	
+
+	public int maxX(){
+		return Math.max(start.x,end.x);
+	}
+	public int minX(){
+		return Math.min(start.x,end.x);
+	}
+	public int maxY(){
+		return Math.max(start.y,end.y);
+	}
+	public int minY(){
+		return Math.min(start.y,end.y);
+	}
+
 	public void attachTo(Plain p){
 		plain=p;
 	}
-	
+
 
 	public void paintSelf(Graphics2D g){
 		// black plain form

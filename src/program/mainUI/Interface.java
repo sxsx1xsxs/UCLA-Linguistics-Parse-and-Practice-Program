@@ -728,6 +728,9 @@ public class Interface extends JPanel {
 		}
 
 		public String getBracketFormArrows(NodeLabel node, HashMap<Arrow,Integer> map){
+			if(node.parentArrows.isEmpty() && node.childrenArrows.isEmpty()){
+				return "";
+			}
 			StringBuffer stringBuffer = new StringBuffer(20);
 			for(Line arrow : node.childrenArrows){
 				Arrow a = (Arrow)arrow;

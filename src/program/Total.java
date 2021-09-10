@@ -11,10 +11,7 @@ import java.awt.Insets;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileWriter;
@@ -25,22 +22,7 @@ import java.nio.file.Files;
 import java.util.Stack;
 import java.util.Vector;
 import javax.imageio.ImageIO;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-import javax.swing.UIManager;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.tree.TreePath;
 
 import program.grammar.Grammar;
@@ -1362,12 +1344,32 @@ public class Total extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(plain.canUndo()){
 					plain.undo();
-
 				}
 			}
 
 		});
-
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke('Z', InputEvent.CTRL_DOWN_MASK),
+				"Undo Pressed");
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke('Y', InputEvent.CTRL_DOWN_MASK),
+				"Redo Pressed");
+		getActionMap().put("Undo Pressed", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				if(plain.canUndo()){
+					plain.undo();
+				}
+			}
+		});
+		getActionMap().put("Redo Pressed", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				if(plain.canRedo()){
+					plain.redo();
+				}
+			}
+		});
 	}
 	private void changeTreeFont(Font font){
 

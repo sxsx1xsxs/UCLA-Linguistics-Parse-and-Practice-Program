@@ -1264,12 +1264,11 @@ public class Plain extends JLayeredPane {
 				x.setLocation(x.location);}		
 		}
 		for (Line y : linelist) {
-			y.start = new Point(y.children.location.x + y.children.getWidth() / 2,
-					y.children.location.y + y.children.label.getLocation().y);
-			y.end = new Point(y.parent.location.x + y.parent.getWidth() / 2,
-					y.parent.location.y + y.parent.label.getHeight() + y.parent.label.getLocation().y);
+			y.update();
 		}
-
+		for(NodeLabel x : list){
+			x.updateWholeTree();
+		}
 	}
 
 	public void bottomUp() {
@@ -1285,8 +1284,6 @@ public class Plain extends JLayeredPane {
 			}
 		}
 		adjust();
-
-
 	}
 
 	public int lowestPointBetweenTwoX(int lowX, int highX){
@@ -1314,7 +1311,7 @@ public class Plain extends JLayeredPane {
 	// used in popup menu for lines when deleting the lines
 	// used in key board deleting line function
 	public void removeline(Line x) {
-		// Alex: Originally used removeLines, but I think this is cleaner may lead to problems down the road.
+		// Alex: Originally used removeLines, but I think this is cleaner, may lead to problems down the road.
 		linelist.remove(x);
 		if (x.parent != null) {
 			x.parent.childrenlines.remove(x);
@@ -3145,6 +3142,16 @@ public class Plain extends JLayeredPane {
 			}else if(nymax>ymax){
 				ymax=nymax;
 			}
+		}
+		for(Line l: linelist){
+			int minX = l.minX();
+			int maxX = l.maxX();
+			int minY = l.minY();
+			int maxY = l.maxY();
+			if(xmin > minX) xmin = minX;
+			if(xmax < maxX) xmax = maxX;
+			if(ymin > minY) ymin = minY;
+			if(ymax < maxY) ymax = maxY;
 		}
 
 		locationx=xmin;

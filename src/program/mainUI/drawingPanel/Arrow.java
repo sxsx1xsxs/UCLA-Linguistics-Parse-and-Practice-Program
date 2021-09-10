@@ -32,6 +32,38 @@ public class Arrow extends Line{
         }
         return false;
     }
+    @Override
+    public int maxX(){
+        int temp = 0;
+        for(Point p: pointList){
+            if(p.x>temp) temp = p.x;
+        }
+        return temp+1;
+    }
+    @Override
+    public int minX(){
+        int temp = Integer.MAX_VALUE;
+        for(Point p: pointList){
+            if(p.x<temp) temp = p.x;
+        }
+        return temp-1;
+    }
+    @Override
+    public int maxY(){
+        int temp = 0;
+        for(Point p: pointList){
+            if(p.y>temp) temp = p.y;
+        }
+        return temp+1;
+    }
+    @Override
+    public int minY(){
+        int temp = Integer.MAX_VALUE;
+        for(Point p: pointList){
+            if(p.y<temp) temp = p.y;
+        }
+        return temp-1;
+    }
     private Island[] getFirstDifferentIslands(NodeLabel n1, NodeLabel n2){
         // returns an array with size two which gives the two outermost islands n1 and n2 do not share
         // Assumes that the two nodes are in a tree, ie they only have one parent(why is this not already mandated by the program code?????)
