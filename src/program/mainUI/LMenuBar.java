@@ -1,12 +1,10 @@
 package program.mainUI;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URI;
 import java.util.Stack;
 import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
@@ -74,7 +72,7 @@ public class LMenuBar extends JMenuBar {
 	// Movement mode
 	public JMenu movement = new JMenu("Movements");
 	public JMenuItem drawArrow = new JMenuItem("Make Movement Arrow (Click Start and End)");
-	public JMenuItem drawIsland = new JMenuItem("Mark Node as Constituent (Click on The Node)");
+	public JMenuItem drawIsland = new JMenuItem("Place Box Around Constituent (Click on the Node)");
 
 	// Mode
 	public JMenuItem freedrawing = new JMenuItem("Draw Tree");
@@ -200,6 +198,14 @@ public class LMenuBar extends JMenuBar {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				try {
+					if(java.awt.Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)){
+						java.awt.Desktop.getDesktop().browse(URI.create("http://www.linguistics.ucla.edu/people/hayes/UCLA-PPP/index.htm"));
+					}
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				}
+				/* deprecated embedded browser version
 				JEditorPane jep = new JEditorPane();
 				jep.setPreferredSize(new Dimension(800,800));
 
@@ -219,6 +225,7 @@ public class LMenuBar extends JMenuBar {
 				f.setPreferredSize(new Dimension(800,600));
 				f.setVisible(true);
 				f.setLocationRelativeTo(null);
+				 */
 			}
 
 		});

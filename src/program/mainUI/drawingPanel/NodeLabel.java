@@ -56,7 +56,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 		public Vector<Line> parentArrows = new Vector<Line>();
 		public Vector<Line> childrenArrows = new Vector<Line>();
 
-	int color = 0;
+		int color = 0;
 		// color=1, blue, when chosen or mouse hovering
 		// color=3, 994C00 orange for ready nodes to be paired up-however, never
 		// set to 3 because this

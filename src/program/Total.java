@@ -27,6 +27,7 @@ import javax.swing.tree.TreePath;
 
 import program.grammar.Grammar;
 import program.mainUI.*;
+import program.mainUI.drawingPanel.Line;
 import program.mainUI.drawingPanel.NodeLabel;
 import program.mainUI.drawingPanel.Plain;
 import program.mainUI.inforTree.SentenceSetStorage;
@@ -63,8 +64,8 @@ public class Total extends JPanel {
 		treeMode.practiceMode();
 		menu.studentmode();
 
-		//treeMode.teacherMode();
-		//menu.teachermode();
+		treeMode.teacherMode();
+		menu.teachermode();
 
 		menu.topdown.setEnabled(false);
 		menu.bottomup.setEnabled(false);
@@ -182,7 +183,6 @@ public class Total extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-
 				int input=pp.getInt("TreeSize")-2;
 				pp.setInt("TreeSize", input);
 				updateTreeFonts();
@@ -1476,27 +1476,15 @@ public class Total extends JPanel {
 	private void updateTreeFonts(){
 		Font font = new Font(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize"));
 
-		for(Component c : plain.drawroom.canvas.getComponents()){
-			NodeLabel x = (NodeLabel) c;
+		for(NodeLabel x : plain.list){
 			x.setFonts(font);
-			x.setSize(x.label.getPreferredSize());
+			Dimension prefSize = x.label.getPreferredSize();
+			x.label.setSize(prefSize);
+			x.setSize(x.getPreferredSize());
 		}
 		// update after we change all the fonts
-		plain.revalidate();
-		plain.repaint();
-		plain.maintainBottomAlignment();
-		treeMode.drawingPanel.adjust();
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("TreeFontStyle"), Font.PLAIN, pp.getInt("TreeSize")));
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				Rectangle bounds = plain.drawroom.getViewport().getViewRect();
-				JScrollBar vertical = plain.drawroom.getVerticalScrollBar();
-				vertical.setValue( (vertical.getMaximum() - bounds.height)  );
-			}
-		});
+		plain.adjust();
 	}
 	public static void main(String[] args) {
 		setUIFont(new javax.swing.plaf.FontUIResource(pp.getString("FontStyle"), Font.PLAIN, pp.getInt("SystemFontSize")));

@@ -1250,9 +1250,9 @@ public class Plain extends JLayeredPane {
 			adjustOneTree(y);
 			y.updateWholeTree();
 		}
+		maintainBottomAlignment();
 		for (Line xy : linelist)
 			xy.update();
-		maintainBottomAlignment();
 		repaint();
 	}
 
