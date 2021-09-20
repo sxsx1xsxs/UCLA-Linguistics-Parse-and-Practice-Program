@@ -1,6 +1,7 @@
 package program.mainUI;
 
 import java.awt.Point;
+import java.util.Vector;
 
 import javax.swing.undo.AbstractUndoableEdit;
 
@@ -15,7 +16,7 @@ public class LUndoEdit extends AbstractUndoableEdit {
 	protected NodeLabel head;
 	protected NodeLabel end;
 	protected Line line;
-	
+
 	public LUndoEdit(){
 		
 	}

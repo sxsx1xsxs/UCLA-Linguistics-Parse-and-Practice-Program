@@ -542,7 +542,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 				public int number = 0;
 			}
 			final IntSingleton i = new IntSingleton();
-			timer.stop();
+			if(timer!=null) timer.stop();
 			timer = new Timer(200, new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {

@@ -184,7 +184,8 @@ public class Plain extends JLayeredPane {
 	public void addIslandParent(NodeLabel n){
 		Island island = new Island(this);
 		island.makeGraphics();
-		add(island);
+
+		drawroom.canvas.add(island);
 		for(Line parentline : n.parentlines){
 			parentline.parent.children.remove(n);
 			parentline.parent.children.add(island);
@@ -196,6 +197,52 @@ public class Plain extends JLayeredPane {
 		addlines(n,island);
 		n.update();
 		n.stop();
+		UndoableEdit undoableEdit = new LUndoEdit(island,n)
+		{
+
+			// Method that is called when we must redo the undone action
+			@Override
+			public void redo() throws javax.swing.undo.CannotRedoException
+			{
+				super.redo();
+				Island island = new Island(plain);
+				island.makeGraphics();
+				head=island;
+				drawroom.add(island);
+				for(Line parentline : end.parentlines){
+					parentline.parent.children.remove(end);
+					parentline.parent.children.add(island);
+					end.parents.remove(parentline.parent);
+					if(!island.parents.contains(parentline.parent))
+						island.parents.add(parentline.parent); // This makes the redo O(N^2), but n should always be small so it won't matter
+					parentline.children = island;
+					island.parentlines.add(parentline);
+					parentline.update();
+				}
+				end.parentlines.clear();
+				addlines(end,island);
+				end.update();
+				top.repaint();
+			}
+
+			@Override
+			public void undo() throws javax.swing.undo.CannotUndoException
+			{
+				super.undo();
+				removelines(end,head);
+				for(Line parentline : head.parentlines){
+					parentline.parent.children.remove(head);
+					parentline.parent.children.add(end);
+					head.parents.remove(parentline.parent);
+					parentline.children = end;
+					end.parentlines.add(parentline);
+					end.parents.add(parentline.parent);
+					parentline.update();
+				}
+				drawroom.canvas.remove(head);
+			}
+		};
+		undoManager.addEdit(undoableEdit);
 	}
 	public static void setUIFont(javax.swing.plaf.FontUIResource f) {
 		java.util.Enumeration keys = UIManager.getDefaults().keys();
@@ -1426,6 +1473,30 @@ public class Plain extends JLayeredPane {
 		x.childrenArrows.add(arrow);
 		y.parentArrows.add(arrow);
 		linelist.add(arrow);
+		UndoableEdit edit = new LUndoEdit(x,y)
+		{
+
+			// Method that is called when we must redo the undone action
+			@Override
+			public void redo() throws javax.swing.undo.CannotRedoException
+			{
+				super.redo();
+				addArrow(head,end);
+			}
+
+			@Override
+			public void undo() throws javax.swing.undo.CannotUndoException
+			{
+				super.undo();
+				for(Line a: head.childrenArrows){
+					if(a.children==end){
+						removeline(a);
+						break;
+					}
+				}
+			}
+		};
+		undoManager.addEdit(edit);
 		return arrow;
 	}
 	// helper function of updatePC
@@ -2843,7 +2914,8 @@ public class Plain extends JLayeredPane {
 						@Override
 						public void undo() throws javax.swing.undo.CannotUndoException
 						{
-							super.undo();	                  
+							super.undo();
+							removelines(this.dl);
 							drawroom.canvas.remove(this.dl);
 							drawroom.repaint();
 
@@ -2863,9 +2935,13 @@ public class Plain extends JLayeredPane {
 						public void redo() throws javax.swing.undo.CannotRedoException
 						{
 							super.redo();
-							drawroom.canvas.remove(this.dl);
 							this.dl.setLocation(this.endMove);
-							drawroom.canvas.add(this.dl);
+							this.dl.location=this.endMove;
+							//update the various arrows that might be connected to this draglabel
+							for(Line l : dl.parentlines) l.update();
+							for(Line l : dl.childrenlines) l.update();
+							for(Line l : dl.parentArrows) l.update();
+							for(Line l : dl.childrenArrows) l.update();
 							drawroom.repaint();
 
 						}
@@ -2874,9 +2950,13 @@ public class Plain extends JLayeredPane {
 						public void undo() throws javax.swing.undo.CannotUndoException
 						{
 							super.undo();
-							drawroom.canvas.remove(this.dl);
 							this.dl.setLocation(this.beforeMove);
-							drawroom.canvas.add(this.dl);
+							this.dl.location=this.beforeMove;
+							//update the various arrows that might be connected to this draglabel
+							for(Line l : dl.parentlines) l.update();
+							for(Line l : dl.childrenlines) l.update();
+							for(Line l : dl.parentArrows) l.update();
+							for(Line l : dl.childrenArrows) l.update();
 							drawroom.repaint();
 
 						}
