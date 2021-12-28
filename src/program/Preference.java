@@ -19,8 +19,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.UIManager;
 
-import sun.misc.IOUtils;
-
 
 //this is the class storing all the path to resource file
 //user's preference setting

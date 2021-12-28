@@ -1,0 +1,16 @@
+S-->NP (Aux) VP
+NP-->({Art NP}) (AP)* N (PP)* (CP)
+NP-->Pro
+AP-->(Adv) A
+VP-->V (NP) (NP) (PP)* (CP)
+VP-->V AP (PP)*
+PP-->P NP
+CP-->(Comp) S
+NP-->NP (Conj NP)*
+VP-->VP (Conj VP)*
+PP-->PP (Conj PP)*
+S-->S (Conj S)*
+CP-->CP (Conj CP)*
+AP-->AP (Conj AP)*
+V-->V (Conj V)*
+V

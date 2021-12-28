@@ -1651,7 +1651,7 @@ public class Plain extends JLayeredPane {
 		String headt=head.label.getText();
 
 		//if it's an island node
-		// side note: what's jiji in this context? I was always taught to say 孩子 for children
+		// side note: what's jiji in this context? I was always taught to say haizi for children
 		if(head.grammarType == 1 ){
 			if(jiji.size()==1){
 				return null;

@@ -522,7 +522,11 @@ public class Total extends JPanel {
 				int retrival = chooser.showSaveDialog(null);
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
-						FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".txt");
+						String chosenFile = chooser.getSelectedFile();
+						if(!chosenFile.endsWith(".txt")){
+							chosenFile = chosenFile + ".txt";
+						}
+						FileWriter fw = new FileWriter(chosenFile);
 						fw.write(output.toString());
 						fw.close();
 					} catch (Exception ex) {

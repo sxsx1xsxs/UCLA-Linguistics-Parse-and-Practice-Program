@@ -1,0 +1,7 @@
+Makefile
+pom.xml
+*.class
+target
+file.jar
+bin
+.settings
