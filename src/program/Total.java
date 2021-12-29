@@ -557,7 +557,7 @@ public class Total extends JPanel {
 				int retrival = chooser.showSaveDialog(null);
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
-						FileWriter fw = new FileWriter(chooser.getSelectedFile() + ".txt");
+						FileWriter fw = new FileWriter(addSuffixConditionally(chooser.getSelectedFile().toString() ,".txt"));
 						fw.write(output.toString());
 						fw.close();
 					} catch (Exception ex) {
@@ -613,7 +613,7 @@ public class Total extends JPanel {
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
 						ans=chooser.getSelectedFile();
-						FileWriter fw = new FileWriter(ans+ ".txt");
+						FileWriter fw = new FileWriter(addSuffixConditionally(ans.toString(),".txt"));
 						fw.write(output.toString());
 						fw.close();
 					} catch (Exception ex) {
@@ -633,7 +633,7 @@ public class Total extends JPanel {
 
 			public void saved() throws IOException{
 				JOptionPane.showMessageDialog(null,"File successfully saved as "+file.getName()+" and "+file.getName()+".txt " +"into designated directory" );
-				FileWriter fw = new FileWriter(file + ".txt");
+				FileWriter fw = new FileWriter(addSuffixConditionally(file.toString(), ".txt"));
 				fw.write(output.toString());
 				fw.close();
 				String output2=new StrongAES().encrypt(output,universalpassword);
@@ -733,7 +733,7 @@ public class Total extends JPanel {
 				String output = store.outputTXT3(treeMode.sentenceTree.sentence);
 
 				try {
-					FileWriter fw = new FileWriter(ans + ".txt");
+					FileWriter fw = new FileWriter(addSuffixConditionally(ans.toString(), ".txt"));
 					fw.write(output.toString());
 					fw.close();
 				} catch (IOException e1) {
@@ -752,7 +752,7 @@ public class Total extends JPanel {
 
 			public void saved() throws IOException{
 				JOptionPane.showMessageDialog(null,"File successfully saved as "+file.getName()+" and "+file.getName()+".txt " +"into designated directory" );
-				FileWriter fw = new FileWriter(file + ".txt");
+				FileWriter fw = new FileWriter(addSuffixConditionally(file.toString(), ".txt"));
 				fw.write(output.toString());
 				fw.close();
 				String output2=new StrongAES().encrypt(output,passwords);
@@ -893,7 +893,7 @@ public class Total extends JPanel {
 				if (retrival == JFileChooser.APPROVE_OPTION) {
 					try {
 						ans=chooser.getSelectedFile();
-						FileWriter fw = new FileWriter(ans + ".txt");
+						FileWriter fw = new FileWriter(addSuffixConditionally(ans.toString(), ".txt"));
 						fw.write(output.toString());
 						fw.close();
 					} catch (Exception ex) {
@@ -1495,6 +1495,10 @@ public class Total extends JPanel {
 				t.createAndShowUI();
 			}
 		});
+	}
+
+	private static String addSuffixConditionally(String input,String suffix) {
+		return input.endsWith(suffix) ? input : input + suffix;
 	}
 
 }

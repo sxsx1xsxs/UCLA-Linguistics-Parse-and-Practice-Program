@@ -85,7 +85,7 @@ public class Preference {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				return prefs.get(x, default_grammar_text);
+				return default_grammar_text;
 			}
 			
 			//??need to improve here for error log

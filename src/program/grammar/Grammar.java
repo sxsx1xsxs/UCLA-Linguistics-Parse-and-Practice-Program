@@ -51,6 +51,7 @@ public class Grammar{
 		//get the text to construct the grammar from Preference and if there is no record
 		//inside Preference, it will read the file grammar.txt		
 			grammar_text=preference.getString("grammar_text");
+			System.out.println(grammar_text);
 			constructor(grammar_text);
 		
 	}
@@ -105,8 +106,8 @@ public class Grammar{
 		grammar_text=input;
 		int i=1;
 		
-		for(String line:input.split(Preference.newline)){
-			Line nowline=new Line(line,i);
+		for(String line:input.split("\n")){
+			Line nowline=new Line(line.trim(),i);
 			lines.add(nowline);
 			if(nowline.error==null){
 				addingRule(nowline);
