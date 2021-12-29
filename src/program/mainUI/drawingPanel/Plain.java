@@ -178,6 +178,12 @@ public class Plain extends JLayeredPane {
 	public void setClicked(int val){
 		clicked = val;
 	}
+
+	public void unclick() {
+		clicked = 0;
+		doublenode.elementAt(0).stop();
+		doublenode.clear();
+	}
 	public Point getBeforeMove(){
 		return beforeMove;
 	}
@@ -1295,11 +1301,13 @@ public class Plain extends JLayeredPane {
 
 		for (NodeLabel y : here) {
 			adjustOneTree(y);
-			y.updateWholeTree();
 		}
 		maintainBottomAlignment();
 		for (Line xy : linelist)
 			xy.update();
+		for (NodeLabel y : here) {
+			y.updateWholeTree();
+		}
 		repaint();
 	}
 

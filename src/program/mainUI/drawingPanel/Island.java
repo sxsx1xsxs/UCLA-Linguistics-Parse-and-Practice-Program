@@ -7,8 +7,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 public class Island extends NodeLabel{
-    static int horiPadding = 20;
-    static int vertPadding = 20;
+    static int horiPadding = 15;
+    static int vertPadding = 15;
     static int borderPadding = 10;
     // JLabels to position around the borders it looks like they're clickable
     private JLabel right = new JLabel();

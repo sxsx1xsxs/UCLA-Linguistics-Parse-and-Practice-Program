@@ -151,6 +151,7 @@ public class Preference {
 			
 
 			String grammar_text_from_jar=Preference.get_string_from_jar(grammar_path);
+			System.out.println(grammar_path);
 			System.out.println(grammar_text_from_jar);
 			
 			//the path used as argument is the relative path to the .class file

@@ -281,17 +281,7 @@ public class Total extends JPanel {
 		menu.drawIsland.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
-				if(plain.getClicked()==3){
-					try{
-						NodeLabel n = (NodeLabel)(plain.drawroom.canvas.getComponentAt(plain.getBeforeMove()));
-						plain.addIslandParent(n);
-						plain.setClicked(0);
-					} catch (Exception e ){
-
-					}
-				} else {
-					plain.setClicked(12); // put it in mark constituent mode
-				}
+				plain.setClicked(12); // put it in mark constituent mode
 			}
 		});
 
@@ -299,6 +289,7 @@ public class Total extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent actionEvent) {
 				plain.arrowMode=true;
+				plain.unclick();
 			}
 		});
 
