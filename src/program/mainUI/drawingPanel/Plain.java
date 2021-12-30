@@ -1283,10 +1283,8 @@ public class Plain extends JLayeredPane {
 		Collections.reverse(words);
 		Point zeroP= new Point(0,0); //default value, never used but we need to guarantee that this has a value if words is empty
 		//we don't actually want to move the text around, so we set up our initial values to be at the first zero
-		System.out.println(zeroP);
 		if(!words.isEmpty())
 			zeroP = words.get(0).getLocation();
-		System.out.println(zeroP);
 		int heightdraw = zeroP.y;
 		int i = zeroP.x;
 
