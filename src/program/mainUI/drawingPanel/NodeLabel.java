@@ -583,7 +583,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			// returns the upper left corner of a theoretical island around the node and its children
 			int x = getX();
 			int y = getY();
-			if(!getParent().equals(plain.drawroom.canvas)){
+			if(getParent() == null || !getParent().equals(plain.drawroom.canvas)){
 				x=location.x;
 				y=location.y;
 			}
@@ -598,7 +598,7 @@ public class NodeLabel extends JPanel implements Comparable<NodeLabel>,Serializa
 			// returns the lower right corner of a theoretical island around the node and its children
 			int x = getX() + getWidth();
 			int y = getY() + getHeight();
-			if(!getParent().equals(plain.drawroom.canvas)){
+			if(getParent() == null || !getParent().equals(plain.drawroom.canvas)){
 				x=location.x + getWidth();
 				y=location.y + getHeight();
 			}

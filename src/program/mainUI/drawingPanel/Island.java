@@ -91,8 +91,10 @@ public class Island extends NodeLabel{
         }
 
         // Put the island last in the component order, ensuring the nodelabels can always be clicked on
-        int count = plain.drawroom.canvas.getComponentCount();
-        plain.drawroom.canvas.setComponentZOrder(this,count-1);
+		if(this.isAncestorOf(plain.drawroom.canvas)){
+			int count = plain.drawroom.canvas.getComponentCount();
+			plain.drawroom.canvas.setComponentZOrder(this,count-1);
+		}
         location = getLocation();
         label.setBounds(0,0,width,borderPadding); // the top
         bottom.setBounds(0,height-borderPadding,width,borderPadding);

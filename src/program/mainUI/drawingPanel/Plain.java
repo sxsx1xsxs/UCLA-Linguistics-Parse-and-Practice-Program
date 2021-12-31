@@ -1076,9 +1076,12 @@ public class Plain extends JLayeredPane {
 				if (now.parents.size() > 0 && now != head) {
 					NodeLabel nowparent = now.parents.elementAt(0);
 					Collections.sort(nowparent.children);
-					int x2 = nowparent.children.firstElement().location.x
-							+ nowparent.children.firstElement().getWidth();
-					int x1 = nowparent.children.lastElement().location.x;
+					NodeLabel first = nowparent.children.firstElement();
+					NodeLabel last = nowparent.children.lastElement();
+					first.update();
+					last.update();
+					int x2 = first.location.x;
+					int x1 = last.location.x + last.getWidth();
 					nowparent.location.x = (x2 + x1) / 2 - nowparent.getWidth() / 2;
 
 					for (NodeLabel cw : nowparent.children) {
