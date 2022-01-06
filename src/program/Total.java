@@ -64,8 +64,8 @@ public class Total extends JPanel {
 		treeMode.practiceMode();
 		menu.studentmode();
 
-		//treeMode.teacherMode();
-		//menu.teachermode();
+		treeMode.teacherMode();
+		menu.teachermode();
 
 		menu.topdown.setEnabled(false);
 		menu.bottomup.setEnabled(false);
@@ -691,7 +691,7 @@ public class Total extends JPanel {
 						ImageIO.write(
 								image,
 								"png",
-								new File(file1+".png"));
+								new File(addSuffixConditionally(file1.toString(),".png")));
 					} catch(Exception ex) {
 						ex.printStackTrace();
 					}

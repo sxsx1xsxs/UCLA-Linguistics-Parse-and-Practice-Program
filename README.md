@@ -26,7 +26,7 @@ Under /version, there is a student.jar and teacher.jar ready for use
 
 Under /inProgressSource, there is an developing copy of the /src. It does not compile for now but it has better structure and shorter length of each file for easier understanding. If you are interested in continuing to develop this software, take a look in this folder and start from there!
 
-Feel free to email me about your questions of the source code at yizhangucla@gmail.com. 
+Feel free to email me about your questions of the source code at ajwalburg@gmailcom. 
 
 
 
